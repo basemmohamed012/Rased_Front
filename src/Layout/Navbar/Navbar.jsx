@@ -122,13 +122,13 @@ const Navbar = () => {
       <div className="hidden lg:flex relative left-20 items-center gap-4">
         <a
           onClick={() => navigate("/login")}
-          className="bg-transparent w-[185px] h-[54px] text-[18px] z-10 text-center bg-white text-[#16423C] border-[#16423C] border-[2px] px-6 py-2 rounded-[5px] dark:border-[#79D7BE] dark:text-[#79D7BE] transition duration-300"
+          className="bg-transparent w-[185px] h-[54px] text-[18px] cursor-pointer z-10 text-center bg-white text-[#16423C] border-[#16423C] border-[2px] px-6 py-2 rounded-[5px] dark:border-[#79D7BE] dark:text-[#79D7BE] transition duration-300"
         >
           <p className="mt-1">تسجيل دخول</p>
         </a>
         <a
-          onClick={() => navigate("/sign_up")}
-          className="bg-[#16423C] w-[185px] h-[54px] z-10 text-[18px] text-center text-white px-6 py-2 rounded-[5px] hover:bg-emerald-700 dark:bg-[#79D7BE] dark:text-white transition duration-300"
+          onClick={() => navigate("/signup")}
+          className="bg-[#16423C] w-[185px] h-[54px] cursor-pointer z-10 text-[18px] text-center text-white px-6 py-2 rounded-[5px] hover:bg-emerald-700 dark:bg-[#79D7BE] dark:text-white transition duration-300"
         >
           <p className="mt-1">إنشاء حساب</p>
         </a>

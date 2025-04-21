@@ -4,10 +4,14 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      colors: {
+        maincolor: "#16423C",
+        graycolor: "#D3D8D7",
+      },
       fontFamily: {
         cairo: ["Cairo", "sans-serif"],
         tajawal: ["Tajawal"],
-        Nastaliq: ["Noto Nastaliq Urdu"],
+        slogan: ["Noto Nastaliq Urdu"],
       },
     },
   },

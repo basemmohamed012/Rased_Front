@@ -5,4 +5,11 @@
 body {
     overflow-x: hidden;
     width: 1440px;
-  }
+}
+
+.slogan-font {
+  font-family: "Noto Nastaliq Urdu", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}

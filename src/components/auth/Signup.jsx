@@ -5,7 +5,7 @@ import vectorss from '../../assets/images/Go.svg';
 import XMLID_834 from '../../assets/images/F.svg';
 import { useNavigate } from "react-router-dom";
 
-const Sign_up = () => {
+const Signup = () => {
   const navigate = useNavigate();
 
   return (
@@ -34,36 +34,38 @@ const Sign_up = () => {
           "
         >
           <div className="flex flex-col gap-4 items-center">
-          <div>
-                <h2 className="text-[22px] font-bold text-[rgba(0,0,0,1)] ">تسجيل الدخول</h2>
-                <p className="text-[14px] text-[rgba(154, 152, 152, 1)] tracking-tighter ml-6">
-                  قم بالتسجيل الان أو العودة الي 
-                  <a onClick={() => navigate("/")} className="font-bold cursor-pointer">
-                    <span className="font-bold"> الصفحة الرئسية</span>
-                  </a>
-                </p>
-              </div>
+          <div className="flex flex-col items-center gap-4">
+            <h2 className="text-2xl font-bold text-black ">حساب جديد في راصــد</h2>
+            <p className="text-md font-slogan text-gray-500 tracking-tighter my-3">
+              راقب بذكاء، أنفق بحكمة
+            </p>
+          </div>
 
             <div className="flex flex-col w-[274px] gap-1">
               <label className="font-bold text-[14px]" htmlFor="text">الاسم بالكامل</label>
-              <input type="text" className="p-2 rounded border-2 border-[#FFD70E] focus:outline-none" />
+              <input type="text" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
             </div>
 
             <div className="flex flex-col w-[274px] gap-1">
               <label className="font-bold text-[14px]" htmlFor="email">البريد الإلكتروني</label>
-              <input type="email" className="p-2 rounded border-2 focus:outline-none" />
+              <input dir='ltr' type="email" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
             </div>
 
             <div className="flex flex-col w-[274px] gap-1">
               <label className="font-bold text-[14px]" htmlFor="password">كلمة المرور</label>
-              <input type="password" className="p-2 rounded border-2 focus:outline-none" />
+              <input dir='ltr' type="password" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
+            </div>
+
+            <div className="flex flex-col w-[274px] gap-1">
+              <label className="font-bold text-[14px]" htmlFor="password">تأكيد كلمة المرور</label>
+              <input dir='ltr' type="password" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
             </div>
 
             <button className="w-[274px] h-[48px] rounded-[5px] bg-[#16423C] hover:text-[#16423C] hover:border-2 hover:border-[#16423C] hover:bg-white text-white text-sm font-semibold transition duration-200">
               تسجيل
             </button>
 
-            <div className="w-full relative mt-4 flex items-center justify-center">
+            {/* <div className="w-full relative mt-4 flex items-center justify-center">
               <hr className="w-[60px] border-t border-[#9A9898]" />
               <span className="px-4 text-[#9A9898]">أو المتابعة باستخدام</span>
               <hr className="w-[60px] border-t border-[#9A9898]" />
@@ -76,12 +78,12 @@ const Sign_up = () => {
               <button className="border-2 border-[#16423C] w-[215px] h-12 py-2 px-4 rounded-lg flex items-center justify-center">
                 <img src={XMLID_834} alt="Vector" />
               </button>
-            </div>
+            </div> */}
 
             <div className="text-center mt-2">
               <p className="text-black text-[14px] font-bold">
                 لديك حساب بالفعل؟{' '}
-                <span onClick={() => navigate('/login')} className="text-[#9A9898] font-semibold cursor-pointer">
+                <span onClick={() => navigate('/login')} className="text-[#9A9898] font-semibold underline cursor-pointer">
                   تسجيل دخول
                 </span>
               </p>
@@ -98,16 +100,18 @@ const Sign_up = () => {
 
       {/* Footer note */}
       <div className="absolute bottom-4 w-full text-center px-4 z-20">
-        <p className="text-[10px] font-extrabold leading-snug text-[#878383]">
+        {/* <p className="text-[10px] font-extrabold leading-snug text-[#878383]">
           من خلال التسجيل بالخدمات المذكورة أعلاه فإنك توافق على
           <a className="text-[#000] font-bold underline mx-1" href="#">شروط الخدمة</a>
           الخاصة بنا وتقر بـ
           <a className="text-[#000] font-bold underline mx-1" href="#">سياسة الخصوصية</a>
           الخاصة بنا التي تصف كيفية تعاملنا مع بياناتك الشخصية
-        </p>
+        </p> */}
+
+        <p className=''>كل الحقوق محفوظة لدي راصــــد &copy; 2025</p>
       </div>
     </div>
   );
 };
 
-export default Sign_up;
+export default Signup;

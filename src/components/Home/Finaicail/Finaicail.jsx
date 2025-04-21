@@ -14,7 +14,7 @@ const Financial = () => {
     {/* العنوان */}
     <div className="text-center mb-20">
       <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 leading-relaxed">
-        <span className="text-black dark:text-white font-[Cairo] md:mb-10 text-4xl">
+        <span className="text-black dark:text-white slogan-font md:mb-10 text-4xl">
           راقِبْ بِذَكاء، أَنْفِقْ بِحِكْمَة
         </span>
       </h2>

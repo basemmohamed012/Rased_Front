@@ -2,7 +2,7 @@ import React from 'react';
 import backImg from '../../assets/images/G.svg';
 import { useNavigate } from "react-router-dom";
 
-const ReseatPass = () => {
+const ResetPassword = () => {
   const navigate = useNavigate();
 
   return (
@@ -47,4 +47,4 @@ const ReseatPass = () => {
   );
 };
 
-export default ReseatPass;
+export default ResetPassword;

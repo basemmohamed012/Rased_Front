@@ -23,17 +23,17 @@ function App() {
   return (
     
     <div className='overflow-hidden'>
-<ErrorBoundary>
+      <ErrorBoundary>
         <Routes >
-        <Route path='/' element={<HomePage />} />
-        <Route path='/signup' element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage  />} />
-        <Route path='/reset-password' element={<ResetPasswordPage />} />
-        <Route path="/profile" element={<DashboardNew />} />
-        <Route path="/dashboard" element={<Wallet />} />
-      </Routes>
-  
-    </ErrorBoundary>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path='/reset-password' element={<ResetPasswordPage />} />
+          <Route path="/profile" element={<DashboardNew />} />
+          <Route path="/dashboard" element={<Wallet />} />
+        </Routes>
+
+      </ErrorBoundary>
      
     </div>
     

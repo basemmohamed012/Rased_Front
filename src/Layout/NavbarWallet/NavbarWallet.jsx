@@ -5,7 +5,7 @@ import profile from '../../assets/images/profile.svg'
 import comment from '../../assets/images/comment.svg'
 import people from '../../assets/images/people.svg'
 import motification from '../../assets/images/notification.svg'
-import arow from '../../assets/images/arowblack.svg'
+// import arow from '../../assets/images/arowblack.svg'
 import DarkModeToggle from '../Navbar/DarkModeToggle'
 const NavbarWallet = () => {
     return (
@@ -32,7 +32,7 @@ const NavbarWallet = () => {
                                 />
                                 <img src={Search} className='absolute z-10 bottom-3 right-4' alt="" />
                             </div>
-                            <button className=" bg-[rgba(235,234,234,1)] w-[80px] h-[38px] rounded-[40px] px-3 py-1  text-sm">
+                            {/* <button className=" bg-[rgba(235,234,234,1)] w-[80px] h-[38px] rounded-[40px] px-3 py-1  text-sm">
                                 <div className='flex gap-2'>
                                     <p className='font-[cairo] font-bold text-[12px]'>
                                         عربية
@@ -41,7 +41,7 @@ const NavbarWallet = () => {
 
                                 </div>
 
-                            </button>
+                            </button> */}
                             <div className='w-[52px] h-[51px] bg-[rgba(153,149,149,0.2)] rounded-[40px] p-[16px] gap-[10px]'>
                                 <img src={comment} alt="" />
                             </div>

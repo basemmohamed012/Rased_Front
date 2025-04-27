@@ -1,116 +1,255 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import backImg from '../../assets/images/G.svg';
 import cradImg from '../../assets/images/CardForm.svg';
-import vectorss from '../../assets/images/Go.svg';
-import XMLID_834 from '../../assets/images/F.svg';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Spinner } from '../helpers/Spinner';
+import { toast } from 'react-toastify';
+
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmedPassword: ''
+  });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Simulate loading the page (remove this in production or replace with actual data loading)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Function to handle input changes
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    
+    // Map the HTML id to the formData property
+    const fieldMap = {
+      'full-name': 'fullName',
+      'email': 'email',
+      'password': 'password',
+      'confirm-password': 'confirmedPassword'
+    };
+    
+    const field = fieldMap[id] || id;
+    
+    setFormData({
+      ...formData,
+      [field]: value
+    });
+
+    console.log('Form Data:', formData); // Debugging line to check form data
+  };
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    
+    // Basic validation
+    if (!formData.fullName || !formData.email || !formData.password || !formData.confirmedPassword) {
+      // toastify display
+      toast.error('جميع الحقول مطلوبة ❌');
+      setError('جميع الحقول مطلوبة');
+      return;
+    }
+    // Check if passwords match
+    if (formData.password !== formData.confirmedPassword) {
+      // toastify display
+      toast.error('كلمات المرور غير متطابقة ❌');
+      setError('كلمات المرور غير متطابقة');
+      return;
+    }
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      // toastify display
+      toast.error('يرجى إدخال بريد إلكتروني صالح ❌');
+      setError('يرجى إدخال بريد إلكتروني صالح');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      
+      // Send data to the backend
+      const response = await axios.post('YOUR_API_ENDPOINT/signup', {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        confirmedPassword: formData.confirmedPassword
+      });
+      
+      // Handle successful response
+      console.log('Response:', response.data);
+      
+      // You might want to store the token or user data in localStorage
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+      
+      // Redirect to login or dashboard
+      navigate('/login');
+      
+    } catch (err) {
+      // Handle error
+      console.error('Signup error:', err);
+      setError(err.response?.data?.message || 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.');
+    } finally {
+      // setIsSubmitting(false);
+    }
+  };
+
+  // Function to handle keydown event and set direction based on input value
+  const handleKeyDown = (e) => {
+    const input = e.target;
+    if (input.innerText === '') {
+      const isArabic = /^[\u0600-\u06FF\s]+$/.test(input.value);
+      if (isArabic) {
+        input.setAttribute('dir', 'rtl');
+      } else {
+        input.setAttribute('dir', 'ltr');
+      }
+    }
+  };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background Image */}
-      <img
-        className="hidden lg:block absolute lg:right-[100px] lg:bottom-10 inset-0 w-full h-full object-cover z-0"
-        src={backImg}
-        alt="background"
-      />
+    <>
+      {
+        loading ? (<Spinner loading={loading} />) :
+        (
+          <div className="relative min-h-screen w-full overflow-hidden">
+          {/* Background Image */}
+          <img
+            className="hidden lg:block absolute lg:right-[100px] lg:bottom-10 inset-0 w-full h-full object-cover z-0"
+            src={backImg}
+            alt="background"
+          />
 
-      {/* Overlay content */}
-      <div className="relative z-10 flex items-center justify-center lg:gap-28 lg:justify-between flex-wrap w-full h-full px-4 md:px-10 py-10">
-        {/* Right: Form */}
-        <form
-          className="
-            flex flex-col gap-4 
-            w-full max-w-[398px] 
-            border-2
-            bg-white relative sm:top-40 lg:top-10 
-            rounded-tr-[40px] md:rounded-tr-[100px] 
-            rounded-bl-[40px] md:rounded-bl-[100px]
-            p-6 
-            mx-auto
-            lg:ml-[120px]
-          "
-        >
-          <div className="flex flex-col gap-4 items-center">
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="text-2xl font-bold text-black ">حساب جديد في راصــد</h2>
-            <p className="text-md font-slogan text-gray-500 tracking-tighter my-3">
-              راقب بذكاء، أنفق بحكمة
-            </p>
+          {/* Overlay content */}
+          <div className="relative z-10 flex items-center justify-center lg:gap-28 lg:justify-between flex-wrap w-full h-full px-4 md:px-10 py-10">
+            {/* Right: Form */}
+            <form
+              onSubmit={handleSubmit}
+              className="
+                flex flex-col gap-4 
+                w-full max-w-[398px] 
+                border-2
+                bg-white relative sm:top-40 lg:top-10 
+                rounded-tr-[40px] md:rounded-tr-[100px] 
+                rounded-bl-[40px] md:rounded-bl-[100px]
+                p-6 
+                mx-auto
+                lg:ml-[120px]
+              "
+            >
+              <div className="flex flex-col gap-4 items-center">
+                <div className="flex flex-col items-center gap-4">
+                  <h2 className="text-2xl font-bold text-black ">حساب جديد في راصــد</h2>
+                  <p className="text-md font-tajawal text-gray-500 tracking-tighter mb-3 text-center">
+                    ابدأ الآن في إدارة أموالك بذكاء. &nbsp;
+                    <span><Link to='/' className='underline text-gray-400 hover:text-gray-500'>الصفحة الرئيسية</Link></span>
+                  </p>
+                </div>
+
+                {/* Error message display */}
+                {error && (
+                  <div className="w-[274px] p-2 bg-red-100 border border-red-400 text-red-700 rounded text-center">
+                    {error}
+                  </div>
+                )}
+
+                <div className="flex flex-col w-[274px] gap-1">
+                  <label className="font-bold text-[14px]" htmlFor="full-name">الاسم بالكامل</label>
+                  <input 
+                    onKeyDown={handleKeyDown}
+                    id="full-name"
+                    type="text" 
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    className="p-2 rounded border-2 border-graycolor focus:border-maincolor" 
+                  />
+                </div>
+
+                <div className="flex flex-col w-[274px] gap-1">
+                  <label className="font-bold text-[14px]" htmlFor="email">البريد الإلكتروني</label>
+                  <input 
+                    dir="ltr" 
+                    id="email"
+                    type="email" 
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="p-2 rounded border-2 border-graycolor focus:border-maincolor" 
+                  />
+                </div>
+
+                <div className="flex flex-col w-[274px] gap-1">
+                  <label className="font-bold text-[14px]" htmlFor="password">كلمة المرور</label>
+                  <input 
+                    dir="ltr" 
+                    id="password"
+                    type="password" 
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="p-2 rounded border-2 border-graycolor focus:border-maincolor" 
+                  />
+                </div>
+
+                <div className="flex flex-col w-[274px] gap-1">
+                  <label className="font-bold text-[14px]" htmlFor="confirm-password">تأكيد كلمة المرور</label>
+                  <input 
+                    dir="ltr" 
+                    id="confirm-password"
+                    type="password" 
+                    value={formData.confirmedPassword}
+                    onChange={handleChange}
+                    className="p-2 rounded border-2 border-graycolor focus:border-maincolor" 
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-[274px] h-[48px] rounded-[5px] bg-[#16423C] hover:text-[#16423C] hover:border-2 hover:border-[#16423C] hover:bg-white text-white text-sm font-semibold transition duration-200 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                >
+                  {isSubmitting ? 'جاري التسجيل ...' : 'تسجيل'}
+                </button>
+
+                <div className="text-center mt-2">
+                  <p className="text-black text-[14px] font-bold">
+                    لديك حساب بالفعل؟{' '}
+                    <span onClick={() => navigate('/login')} className="text-[#9A9898] font-semibold underline cursor-pointer">
+                      تسجيل دخول
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </form>
+
+            {/* Left: Image (hidden on small screens) */}
+            <div className="hidden lg:flex flex-col justify-center items-center w-[526px] mt-[130px] ml-[100px] h-[300px]">
+              <img src={cradImg} alt="card" className="w-[456px] h-[253px]" />
+              <p className="text-white font-bold text-center mt-4">تحليلات موثوقة تقودك لاتخاذ القرار المالي الصحيح.</p>
+            </div>
           </div>
 
-            <div className="flex flex-col w-[274px] gap-1">
-              <label className="font-bold text-[14px]" htmlFor="text">الاسم بالكامل</label>
-              <input type="text" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
-            </div>
-
-            <div className="flex flex-col w-[274px] gap-1">
-              <label className="font-bold text-[14px]" htmlFor="email">البريد الإلكتروني</label>
-              <input dir='ltr' type="email" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
-            </div>
-
-            <div className="flex flex-col w-[274px] gap-1">
-              <label className="font-bold text-[14px]" htmlFor="password">كلمة المرور</label>
-              <input dir='ltr' type="password" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
-            </div>
-
-            <div className="flex flex-col w-[274px] gap-1">
-              <label className="font-bold text-[14px]" htmlFor="password">تأكيد كلمة المرور</label>
-              <input dir='ltr' type="password" className="p-2 rounded border-2 border-graycolor focus:border-maincolor" />
-            </div>
-
-            <button className="w-[274px] h-[48px] rounded-[5px] bg-[#16423C] hover:text-[#16423C] hover:border-2 hover:border-[#16423C] hover:bg-white text-white text-sm font-semibold transition duration-200">
-              تسجيل
-            </button>
-
-            {/* <div className="w-full relative mt-4 flex items-center justify-center">
-              <hr className="w-[60px] border-t border-[#9A9898]" />
-              <span className="px-4 text-[#9A9898]">أو المتابعة باستخدام</span>
-              <hr className="w-[60px] border-t border-[#9A9898]" />
-            </div>
-
-            <div className="flex justify-center w-[274px] gap-4">
-              <button className="border-2 border-[#16423C] w-[215px] h-12 py-2 px-4 rounded-lg flex items-center justify-center">
-                <img src={vectorss} alt="Vector" />
-              </button>
-              <button className="border-2 border-[#16423C] w-[215px] h-12 py-2 px-4 rounded-lg flex items-center justify-center">
-                <img src={XMLID_834} alt="Vector" />
-              </button>
-            </div> */}
-
-            <div className="text-center mt-2">
-              <p className="text-black text-[14px] font-bold">
-                لديك حساب بالفعل؟{' '}
-                <span onClick={() => navigate('/login')} className="text-[#9A9898] font-semibold underline cursor-pointer">
-                  تسجيل دخول
-                </span>
-              </p>
-            </div>
+          {/* Footer note */}
+          <div className="mt-12 mb-6 text-center px-4 z-20">
+            <p className=''>كل الحقوق محفوظة لدي راصــــد &copy; 2025</p>
           </div>
-        </form>
-
-        {/* Left: Image (hidden on small screens) */}
-        <div className="hidden lg:flex flex-col justify-center items-center w-[526px] mt-[130px] ml-[100px] h-[300px]">
-          <img src={cradImg} alt="card" className="w-[456px] h-[253px]" />
-          <p className="text-white font-bold text-center mt-4">تحليلات موثوقة تقودك لاتخاذ القرار المالي الصحيح.</p>
         </div>
-      </div>
-
-      {/* Footer note */}
-      <div className="absolute bottom-4 w-full text-center px-4 z-20">
-        {/* <p className="text-[10px] font-extrabold leading-snug text-[#878383]">
-          من خلال التسجيل بالخدمات المذكورة أعلاه فإنك توافق على
-          <a className="text-[#000] font-bold underline mx-1" href="#">شروط الخدمة</a>
-          الخاصة بنا وتقر بـ
-          <a className="text-[#000] font-bold underline mx-1" href="#">سياسة الخصوصية</a>
-          الخاصة بنا التي تصف كيفية تعاملنا مع بياناتك الشخصية
-        </p> */}
-
-        <p className=''>كل الحقوق محفوظة لدي راصــــد &copy; 2025</p>
-      </div>
-    </div>
+        )
+      }
+    </>
   );
 };
 

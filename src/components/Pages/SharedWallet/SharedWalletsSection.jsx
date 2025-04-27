@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import walletIcon from "../../../assets/images/share.svg";
 import mageFilter from "../../../assets/images/mage_filter.svg";
 import Dropdown from "../../../Layout/DropDown/DropDown.jsx";
-import AddWalletModal from "./Addwalletindividual.jsx";
+import AddWalletModal from "../Wallet/Addwalletindividual.jsx";
 
 const sharedWallets = [
   { id: 1, name: "محفظتي", type: "مشتركة" , in : "هذا الشهر+ 14.2%" , profit: "14%", members: 7, owner: "ايمن محمود" },

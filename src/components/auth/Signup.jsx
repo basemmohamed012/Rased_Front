@@ -4,6 +4,7 @@ import backImg from '../../assets/images/G.svg';
 import cradImg from '../../assets/images/CardForm.svg';
 import { Link, useNavigate } from "react-router-dom";
 import { Spinner } from '../helpers/Spinner';
+import { ACCOUNT_STATUS, API_BASE_URL } from '../../constants/AppConstants';
 import { toast } from 'react-toastify';
 
 
@@ -14,13 +15,24 @@ const Signup = () => {
     fullName: '',
     email: '',
     password: '',
-    confirmedPassword: ''
+    confirmedPassword: '',
+    rememberMe: false
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Simulate loading the page (remove this in production or replace with actual data loading)
   useEffect(() => {
+    let accountStatus = localStorage.getItem('acc-stat');
+    if(accountStatus) {
+      if(accountStatus === ACCOUNT_STATUS.SUSPENDED) {
+        navigate('/verify-otp');
+      }
+      else if(accountStatus === ACCOUNT_STATUS.ACTIVE) {
+        navigate('/dashboard');
+      }
+    }
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1500);
@@ -31,13 +43,17 @@ const Signup = () => {
   // Function to handle input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
+    if(id === 'remember-me') {
+      formData.rememberMe = e.target.checked;
+    }
     
     // Map the HTML id to the formData property
     const fieldMap = {
       'full-name': 'fullName',
       'email': 'email',
       'password': 'password',
-      'confirm-password': 'confirmedPassword'
+      'confirm-password': 'confirmedPassword',
+      'remember-me': 'rememberMe'
     };
     
     const field = fieldMap[id] || id;
@@ -50,62 +66,115 @@ const Signup = () => {
     console.log('Form Data:', formData); // Debugging line to check form data
   };
 
-  // Function to handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    
+  // Validation Function
+  const formValidation = () => {
     // Basic validation
     if (!formData.fullName || !formData.email || !formData.password || !formData.confirmedPassword) {
-      // toastify display
-      toast.error('جميع الحقول مطلوبة ❌');
-      setError('جميع الحقول مطلوبة');
-      return;
+      setError(['جميع الحقول مطلوبة']);
+      return false;
     }
     // Check if passwords match
     if (formData.password !== formData.confirmedPassword) {
-      // toastify display
-      toast.error('كلمات المرور غير متطابقة ❌');
-      setError('كلمات المرور غير متطابقة');
-      return;
+      setError(['كلمات المرور غير متطابقة']);
+      return false;
     }
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      // toastify display
-      toast.error('يرجى إدخال بريد إلكتروني صالح ❌');
-      setError('يرجى إدخال بريد إلكتروني صالح');
-      return;
+      setError(['يرجى إدخال بريد إلكتروني صالح']);
+      return false;
+    }
+    // Password validation
+    const passwordErrors = [];
+    // Check minimum length
+    if (formData.password.length < 5) {
+      passwordErrors.push('يجب أن تكون كلمة المرور 5 أحرف على الأقل');
+    }
+    // Check for at least one letter
+    const letterRegex = /[a-zA-Z]/;
+    if (!letterRegex.test(formData.password)) {
+      passwordErrors.push('يجب أن تحتوي كلمة المرور على حرف واحد على الأقل');
+    }
+    const upperCaseRegex = /[A-Z]/;
+    if (!upperCaseRegex.test(formData.password)) {
+      passwordErrors.push('يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل');
+    }
+    const lowerCaseRegex = /[a-z]/;
+    if (!lowerCaseRegex.test(formData.password)) {
+      passwordErrors.push('يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل');
+    }
+    // Check for at least one non-alphanumeric character
+    const specialCharRegex = /[^a-zA-Z0-9]/;
+    if (!specialCharRegex.test(formData.password)) {
+      passwordErrors.push('يجب أن تحتوي كلمة المرور على حرف خاص واحد على الأقل');
+    }
+    // Check for at least one digit
+    const digitRegex = /[0-9]/;
+    if (!digitRegex.test(formData.password)) {
+      passwordErrors.push('يجب أن تحتوي كلمة المرور على رقم واحد على الأقل');
+    }
+    // If there are password errors, set them and return
+    if (passwordErrors.length > 0) {
+      setError(passwordErrors);
+      return false;
+    }
+
+    return true; // All validations passed
+  }
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    
+    // Validation First
+    if (!formValidation()) {
+      return; // Stop submission if validation fails
     }
 
     try {
       setIsSubmitting(true);
       
       // Send data to the backend
-      const response = await axios.post('YOUR_API_ENDPOINT/signup', {
+      const response = await axios.post(`${API_BASE_URL}/Auth/Register`, {
         fullName: formData.fullName,
         email: formData.email,
         password: formData.password,
         confirmedPassword: formData.confirmedPassword
       });
       
-      // Handle successful response
-      console.log('Response:', response.data);
-      
-      // You might want to store the token or user data in localStorage
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-      }
+      // Store Some Data
+      localStorage.setItem('acc-stat', ACCOUNT_STATUS.SUSPENDED); // Set account status to 'suspended'
+      localStorage.setItem('user-email', formData.email);
+      localStorage.setItem('remember-me', formData.rememberMe);
+      localStorage.setItem('message', response.data.message);
       
       // Redirect to login or dashboard
-      navigate('/login');
+      navigate('/verify-otp');
       
     } catch (err) {
-      // Handle error
-      console.error('Signup error:', err);
-      setError(err.response?.data?.message || 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.');
+      // Check if the response has errors
+      if(err.status !== 200 || !err.response.data.succeeded) {
+        let errors = err.response.data.errors;
+        let message = ['جميع الحقول مطلوبة ❌'];
+        // check if the errors property is array
+        if(Array.isArray(err.response.data.errors) && err.response.data.errors.length > 0) {
+          message = errors;
+        }
+        else {
+          // check if the errors property is object
+          if(typeof errors === 'object') {
+            message = Object.values(errors);
+          }
+        }
+        // toastify display
+        // toast.error(message);
+        setError(message);
+
+        return;
+      }
     } finally {
-      // setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -163,8 +232,16 @@ const Signup = () => {
 
                 {/* Error message display */}
                 {error && (
-                  <div className="w-[274px] p-2 bg-red-100 border border-red-400 text-red-700 rounded text-center">
-                    {error}
+                  <div className="w-[274px] p-2 bg-red-100 border text-red-700 rounded text-sm text-right">
+                    {Array.isArray(error) ? (
+                      <ul className="list-disc pl-5">
+                        {error.map((err, index) => (
+                          <li key={index}>{err}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      error
+                    )}
                   </div>
                 )}
 
@@ -214,6 +291,17 @@ const Signup = () => {
                     onChange={handleChange}
                     className="p-2 rounded border-2 border-graycolor focus:border-maincolor" 
                   />
+                </div>
+
+                <div className="flex items-center w-[274px] gap-2 mb-2">
+                  <input 
+                    type="checkbox" 
+                    id="remember-me"
+                    value={formData.rememberMe}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-[#16423C] border-graycolor focus:border-maincolor rounded" 
+                  />
+                  <label className="font-bold text-[14px]" htmlFor="remember-me">تذكرني؟</label>
                 </div>
 
                 <button 

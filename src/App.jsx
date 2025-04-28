@@ -11,6 +11,7 @@ import DashboardNew from './components/Pages/Dashboardd/DashboardNew.jsx'
 import LoginPage from './components/Pages/auth/LoginPage.jsx';
 import SignupPage from './components/Pages/auth/SignupPage.jsx';
 import ResetPasswordPage from './components/Pages/auth/ResetPasswordPage.jsx';
+import VerifyOTPPage from './components/Pages/auth/VerifyOTPPage.jsx';
 
 function App() {
   useEffect(() => {
@@ -27,6 +28,7 @@ function App() {
         <Routes >
           <Route path='/' element={<HomePage />} />
           <Route path='/signup' element={<SignupPage />} />
+          <Route path='/verify-otp' element={<VerifyOTPPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path='/reset-password' element={<ResetPasswordPage />} />
           <Route path="/profile" element={<DashboardNew />} />

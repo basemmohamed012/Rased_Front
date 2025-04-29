@@ -223,10 +223,10 @@ const Signup = () => {
             >
               <div className="flex flex-col gap-4 items-center">
                 <div className="flex flex-col items-center gap-4">
-                  <h2 className="text-2xl font-bold text-black ">حساب جديد في راصــد</h2>
+                  <h2 className="text-2xl font-bold text-maincolor ">حساب جديد في راصــد</h2>
                   <p className="text-md font-tajawal text-gray-500 tracking-tighter mb-3 text-center">
                     ابدأ الآن في إدارة أموالك بذكاء. &nbsp;
-                    <span><Link to='/' className='underline text-gray-400 hover:text-gray-500'>الصفحة الرئيسية</Link></span>
+                    <span><Link to='/' className='underline text-sm text-gray-400 hover:text-maincolor'>الصفحة الرئيسية</Link></span>
                   </p>
                 </div>
 
@@ -313,9 +313,9 @@ const Signup = () => {
                 </button>
 
                 <div className="text-center mt-2">
-                  <p className="text-black text-[14px] font-bold">
+                  <p className="text-maincolor text-[14px] font-bold">
                     لديك حساب بالفعل؟{' '}
-                    <span onClick={() => navigate('/login')} className="text-[#9A9898] font-semibold underline cursor-pointer">
+                    <span onClick={() => navigate('/login')} className="text-[#9A9898] font-semibold hover:text-maincolor underline cursor-pointer">
                       تسجيل دخول
                     </span>
                   </p>

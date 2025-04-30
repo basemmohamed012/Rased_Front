@@ -33,6 +33,11 @@ const Login = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
+      const message = localStorage.getItem('message');
+      if(message) {
+        toast.success(message);
+        localStorage.removeItem('message'); // Clear message after showing it
+      }
     }, 1500);
 
     return () => clearTimeout(timer);
@@ -103,9 +108,7 @@ const Login = () => {
       // Store Some Data
       localStorage.setItem('acc-stat', ACCOUNT_STATUS.SUSPENDED); // Set account status to 'suspended'
       localStorage.setItem('user-email', formData.email);
-
-      console.log('from submit:', formData.rememberMe);
-      
+      localStorage.setItem('otp', 'false');       
       localStorage.setItem('remember-me', formData.rememberMe);
       localStorage.setItem('message', response.data.message);
       
@@ -171,7 +174,7 @@ const Login = () => {
                   <h2 className="text-2xl font-bold text-maincolor ">مرحـــــبــًا بك في راصــــد</h2>
                   <p className="text-md font-tajawal text-gray-500 tracking-tighter mb-3 text-center">
                     تحديثات جديدة بانتظارك في راصــد &nbsp;
-                    <span><Link to='/' className='underline text-sm text-gray-400 hover:text-maincolor'>الصفحة الرئيسية</Link></span>
+                    <span><Link to='/' className='hover:underline text-sm text-gray-400 hover:text-maincolor'>الصفحة الرئيسية</Link></span>
                   </p>
                 </div>
 
@@ -212,6 +215,7 @@ const Login = () => {
                     onChange={handleChange}
                     className="p-2 rounded border-2 border-graycolor focus:border-maincolor" 
                   />
+                  <Link to='/reset-password/verify' className='text-sm text-gray-400 hover:text-maincolor hover:underline mt-1'>نسيت كلمة المرور؟</Link>
                 </div>
 
                 <div className="flex items-center w-[274px] gap-2 mb-2">
@@ -236,7 +240,7 @@ const Login = () => {
                 <div className="text-center mt-2">
                   <p className="text-maincolor text-[14px] font-bold">
                     لا تمتلك حساب؟{' '}
-                    <span onClick={() => navigate('/signup')} className="text-[#9A9898] font-semibold underline hover:text-maincolor cursor-pointer">
+                    <span onClick={() => navigate('/signup')} className="text-gray-400 hover:underline hover:text-maincolor cursor-pointer">
                       إنشاء حساب
                     </span>
                   </p>

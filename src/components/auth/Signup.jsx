@@ -146,6 +146,7 @@ const Signup = () => {
       // Store Some Data
       localStorage.setItem('acc-stat', ACCOUNT_STATUS.SUSPENDED); // Set account status to 'suspended'
       localStorage.setItem('user-email', formData.email);
+      localStorage.setItem('otp', 'false');
       localStorage.setItem('remember-me', formData.rememberMe);
       localStorage.setItem('message', response.data.message);
       

@@ -18,21 +18,29 @@ const VerifyOTP = () => {
   
   const inputRefs = useRef([]);
 
+  const userOtp = localStorage.getItem('otp');
   const userEmail = localStorage.getItem('user-email');
   const rememberMe = localStorage.getItem('remember-me') || false;
-  const message = localStorage.getItem('message') || 'أهلا بك';
+  const message = localStorage.getItem('message');
 
   // Initial page load
   useEffect(() => {
+    // check if there is any manipulation
+    if(!userOtp || userOtp != 'false') {
+      window.history.back();
+      return;
+    }
+    // Check the user email
     if (!userEmail) {
-      localStorage.removeItem('acc-stat');
+      localStorage.clear();
       localStorage.setItem('message', 'حدث خطأ ما، الرجاء إعادة تسجيل الدخول');
       navigate('/login');
     }
 
     const timer = setTimeout(() => {
       setLoading(false);
-      toast.success(message);
+      if(message)
+        toast.success(message);
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -128,8 +136,16 @@ const VerifyOTP = () => {
           navigate('/dashboard')
         }
       }
-      else {
+      else if(dataResponse.accountStatus === ACCOUNT_STATUS.RESET_PASSWORD) {
+        localStorage.setItem('message', response.data.message);
+        localStorage.setItem('otp', 'true');
+        localStorage.setItem('user-email', userEmail);
         navigate('/reset-password');
+      }
+      else {
+        localStorage.clear();
+        localStorage.setItem('message', 'حدث خطأ ما، الرجاء إعادة تسجيل الدخول');
+        navigate('/login');
       }
       
     } catch (err) {

@@ -1,9 +1,9 @@
 import React from 'react';
 import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet';
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
-import Buttonss from '../Dashboardd/DashContent/Buttonss.jsx'
-import Footer from '../../Home/Footer/Footer';
 
+import Footer from '../../Home/Footer/Footer';
+import SharedWalletsSection from './SharedWalletsSection.jsx';
 
 const Wallet = () => {
   return (
@@ -22,14 +22,15 @@ const Wallet = () => {
 
         {/* Page Content */}
         <div className="p-6 absolute left-[70px] top-10 h-[770px] space-y-10">
-         
-         <Buttonss />
-        
+
+          <SharedWalletsSection />
+
+
         </div>
       </div>
 
       {/* Footer */}
-      <div className="row-span-1 mt-10">
+      <div className=" row-span-1 mt-6 ">
         <Footer />
       </div>
     </div>

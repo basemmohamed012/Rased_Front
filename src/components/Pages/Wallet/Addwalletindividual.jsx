@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 export default function AddWalletModal({ onClose, onSave }) {
   const [walletName, setWalletName] = useState("");
   const [walletType, setWalletType] = useState("العائلة");

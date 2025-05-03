@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Card, CardContent } from "../../../Layout/ui/card";
-import { Badge } from "../../../Layout/ui/badge";
-import {cn} from '../../../Layout/lib/utils'
-import apple from "../../../assets/images/apple.svg"
-import mahmoud from "../../../assets/images/mah,oud.svg"
-import mohamed from "../../../assets/images/mohamed.svg"
-import selling from "../../../assets/images/selling.svg"
-import sub from "../../../assets/images/subscribe.svg"
-import transfer from "../../../assets/images/transfer.svg"
+import { Card, CardContent } from "../../../../Layout/ui/card";
+import { Badge } from "../../../../Layout/ui/badge";
+import {cn} from '../../../../Layout/lib/utils'
+import apple from "../../../../assets/images/apple.svg"
+import mahmoud from "../../../../assets/images/mah,oud.svg"
+import mohamed from "../../../../assets/images/mohamed.svg"
+import selling from "../../../../assets/images/selling.svg"
+import sub from "../../../../assets/images/subscribe.svg"
+import transfer from "../../../../assets/images/transfer.svg"
 
 const transactions = [
   {
@@ -16,8 +16,8 @@ const transactions = [
     date: "05 مارس",
     time: "12:05 م",
     status: "مكتمل",
-    imgType: selling,
-    type: "شراء",
+    balance : 4000,
+    type: 1,
     method: "بطاقة ائتمانية",
     cardEnding: "4120",
     user: "ICloud",
@@ -29,8 +29,8 @@ const transactions = [
     date: "05 مارس",
     time: "12:05 م",
     status: "قيد التنفيذ",
-    imgType: sub,
-    type: "اشتراك",
+    balance : 4000,
+    type: 1,
     method: "بطاقة ائتمانية",
     cardEnding: "4120",
     user: "ICloud",
@@ -41,9 +41,9 @@ const transactions = [
     amount: 100,
     date: "05 مارس",
     time: "12:05 م",
-    imgType: transfer,
     status: "قيد التنفيذ",
-    type: "تحويل نقدي",
+    balance : 4000,
+    type: 1,
     method: "بطاقة ائتمانية",
     cardEnding: "4120",
     user: "محمود فرج",
@@ -54,9 +54,9 @@ const transactions = [
     amount: 150,
     date: "05 مارس",
     time: "12:05 م",
-    imgType: selling,
     status: "مكتمل",
-    type: "تحويل نقدي",
+    balance : 4000,
+    type: 1,
     method: "بطاقة ائتمانية",
     cardEnding: "4120",
     user: " محمد عبدالله",
@@ -82,10 +82,12 @@ export default function TransactionTable() {
   });
 
   return (
-    <Card className="overflow-x-auto w-[930px]">
+    <Card className="overflow-x-auto w-[1020px]">
       <CardContent className="p-4 space-y-4">
         <div className="flex flex-col md:flex-row items-end   justify-between gap-4">
-          <h2 className="text-[30px] font-bold text-end w-full md:w-auto">سجل المعاملات</h2>
+         <div>
+         <h2 className="text-[30px] font-bold text-end w-full md:w-auto"> مصادر الدخل</h2>
+         </div>
 
           <div className="flex flex-col md:flex-row gap-48 w-full md:w-auto">
             <input
@@ -113,16 +115,20 @@ export default function TransactionTable() {
         <tbody>
   {filteredTransactions.length > 0 ? (
     filteredTransactions.map((tx) => (
-      <tr key={tx.id} className="border-b py-4 hover:bg-gray-50">
+      <tr key={tx.id} className="border-b  py-4 hover:bg-gray-50">
         <td className="py-4">
         <img src={tx.icon} alt={tx.user}  />
           </td>
         <td>{tx.user}</td>
+        
         <td>{tx.method} **** {tx.cardEnding}</td>
-        <td>
-          <div className="flex items-center justify-end gap-1">
-          <img src={tx.imgType} alt={tx.user}  /> {tx.type}
-          </div>
+        <td className="  gap-10">
+     
+         {tx.balance}$   
+        </td>
+        <td className="items-end text-left relative right-5">
+        {tx.type} 
+        
         </td>
         <td>
         <Badge

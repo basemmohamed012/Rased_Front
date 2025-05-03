@@ -14,7 +14,7 @@ const Navbar = () => {
   const links = [
     { name: "الرئيسية", path: "/" },
     { name: "من نحن", path: "/about" },
-    { name: "تواصل معنا", path: "/dashboard" },
+    { name: "تواصل معنا", path: "/wallets" },
     { name: "الحساب الشخصي", path: "/profile" },
   ];
 

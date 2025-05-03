@@ -7,6 +7,7 @@ import Nazra from '../../Dashboardd/DashContent/Nazra.jsx';
 import DataTable from '../DataTable.jsx';
 import Total from './Total.jsx';
 
+
 const tabs = ['إجمالي الدخل', 'إجمالي المصروفات', 'عدد العمليات'];
 
 export default function TabsWithTable() {

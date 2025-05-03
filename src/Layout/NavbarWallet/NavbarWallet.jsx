@@ -5,9 +5,17 @@ import profile from '../../assets/images/profile.svg'
 import comment from '../../assets/images/comment.svg'
 import people from '../../assets/images/people.svg'
 import motification from '../../assets/images/notification.svg'
+import notificationActive from '../../assets/images/mdi_bell-ring.svg'
 // import arow from '../../assets/images/arowblack.svg'
 import DarkModeToggle from '../Navbar/DarkModeToggle'
+import { useNavigate } from 'react-router-dom'
 const NavbarWallet = () => {
+    const navigate = useNavigate();
+    const Notify = () => {
+        navigate('/notification');
+    }
+
+    const isActive = location.pathname === '/notification';
     return (
         <div>
             <div className='flex justify-around mt-5'>
@@ -48,9 +56,14 @@ const NavbarWallet = () => {
                             <div className='w-[50px] h-[51px] bg-[rgba(153,149,149,0.2)] rounded-[40px] p-[16px] gap-[10px]'>
                                 <img src={people} alt="" />
                             </div>
-                            <div className='w-[56px] h-[51px] bg-[rgba(153,149,149,0.2)] rounded-[40px] p-[16px] gap-[10px]'>
-                                <img src={motification} alt="" />
-                            </div>
+                            <button onClick={Notify}>
+                                <div
+                                    className={`w-[56px] h-[51px] rounded-[40px] p-[16px] gap-[10px] ${isActive ? 'bg-[#16423C]' : 'bg-[rgba(153,149,149,0.2)]'
+                                        }`}
+                                >
+                                    <img src={isActive ? notificationActive : motification} />
+                                </div>
+                            </button>
                             <DarkModeToggle />
                             <div className="text-sm text-right">
                                 <div className="font-semibold">Basant Selim</div>

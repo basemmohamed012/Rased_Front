@@ -9,7 +9,7 @@ const Wallet = () => {
   return (
     <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
       {/* Navbar */}
-      <div className="row-span-1">
+      <div className=" row-span-1 relative z-10">
         <NavbarWallet />
       </div>
 
@@ -32,7 +32,7 @@ const Wallet = () => {
       </div>
 
       {/* Footer */}
-      <div className="row-span-1 mt-6">
+      <div className=" row-span-1 mt-6 ">
         <Footer />
       </div>
     </div>

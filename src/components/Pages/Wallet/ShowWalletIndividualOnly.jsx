@@ -1,11 +1,9 @@
-import React from 'react';
-import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet';
-import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
-import Buttonss from '../Dashboardd/DashContent/Buttonss.jsx'
-import Footer from '../../Home/Footer/Footer';
-
-
-const Wallet = () => {
+import React from 'react'
+import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet'
+import SidebarW from '../../../Layout/SideBar/SidebarW.jsx'
+import WalletIdividual from '../../Pages/Wallet/WalletIndividual.jsx'
+import Footer from '../../Home/Footer/Footer'
+const ShowWalletIndividualOnly = () => {
   return (
     <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
       {/* Navbar */}
@@ -22,18 +20,18 @@ const Wallet = () => {
 
         {/* Page Content */}
         <div className="p-6 absolute left-[70px] top-10 h-[770px] space-y-10">
+          <WalletIdividual />
          
-         <Buttonss />
-        
+          
         </div>
       </div>
 
       {/* Footer */}
-      <div className="row-span-1 mt-10">
+      <div className=" row-span-1 mt-6 ">
         <Footer />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Wallet;
+export default ShowWalletIndividualOnly

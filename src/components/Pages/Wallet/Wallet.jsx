@@ -3,7 +3,7 @@ import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet';
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
 import WalletIndividual from '../../Pages/Wallet/WalletIndividual.jsx';
 import Footer from '../../Home/Footer/Footer';
-import SharedWalletsSection from './SharedWalletsSection.jsx';
+import SharedWalletsSection from '../SharedWallet/SharedWalletsSection.jsx';
 
 const Wallet = () => {
   return (

@@ -1,12 +1,12 @@
 import React from 'react'
-import Signup from '../../auth/Signup'
+import ResetPwdVerify from '../../auth/ResetPwdVerify'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-const SignupPage = () => {
+const ResetPasswordPage = () => {
   return (
     <>
-        <Signup />
+        <ResetPwdVerify />
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -22,4 +22,4 @@ const SignupPage = () => {
   )
 }
 
-export default SignupPage
+export default ResetPasswordPage

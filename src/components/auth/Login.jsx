@@ -22,6 +22,7 @@ const Login = () => {
   // Simulate loading the page (remove this in production or replace with actual data loading)
   useEffect(() => {
     let accountStatus = localStorage.getItem('acc-stat');
+    let otp = localStorage.getItem('otp');
     if(accountStatus) {
       if(accountStatus === ACCOUNT_STATUS.SUSPENDED) {
         navigate('/verify-otp');
@@ -29,14 +30,19 @@ const Login = () => {
       else if(accountStatus === ACCOUNT_STATUS.ACTIVE) {
         navigate('/dashboard');
       }
+      else if(accountStatus === ACCOUNT_STATUS.RESET_PASSWORD && otp == 'true') {
+        navigate('/reset-password');
+      }
     }
 
     const timer = setTimeout(() => {
       setLoading(false);
       const message = localStorage.getItem('message');
+
+      console.log(message);
+
       if(message) {
         toast.success(message);
-        localStorage.removeItem('message'); // Clear message after showing it
       }
     }, 1500);
 

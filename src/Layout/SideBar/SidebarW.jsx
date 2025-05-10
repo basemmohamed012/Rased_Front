@@ -129,7 +129,7 @@ const SidebarWallet = () => {
             : 'text-black'
         }`}
       >
-        محفظة شخصية
+        محافظي الشخصية
       </button>
 
       <button
@@ -143,7 +143,7 @@ const SidebarWallet = () => {
             : 'text-black'
         }`}
       >
-        محفظة مشتركة
+        محافظي المشتركة
       </button>
     </div>
   )}

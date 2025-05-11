@@ -3,6 +3,9 @@ import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet'
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx'
 import WalletIdividual from '../../Pages/Wallet/WalletIndividual.jsx'
 import Footer from '../../Home/Footer/Footer'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const ShowWalletIndividualOnly = () => {
   return (
     <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
@@ -30,6 +33,19 @@ const ShowWalletIndividualOnly = () => {
       <div className=" row-span-1 mt-6 ">
         <Footer />
       </div>
+      
+      {/* Toastify */}
+      <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light" />
     </div>
   )
 }

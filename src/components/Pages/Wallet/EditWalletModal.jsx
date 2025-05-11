@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { API_BASE_URL } from "../../../constants/AppConstants";
 import { toast } from "react-toastify";
 
-export default function AddWalletModal({ onClose, onSave, saveLoading }) {
+const EditWalletModal = ({ onClose, onEdit, walletId, token, editLoading }) => {
   const [walletName, setWalletName] = useState('');
   const [balance, setBalance] = useState(0.0);
   const [notes, setNotes] = useState('');
+  // Wallet
+  const [wallet, setWallet] = useState(null);
   // Data Parts
   const [currencies, setCurrencies] = useState([]);
   const [currency, setCurrency] = useState('-999');
@@ -15,14 +17,57 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
   const [statusData, setStatusData] = useState([]);
   const [status, setStatus] = useState('-999');
 
+  // Fetch the Wallet From API
+  useEffect(() => {
+    const fetchWallet = async () => {
+      const apiUrl = `${API_BASE_URL}/Wallets/Single/${walletId}`;
+      try {
+        // API Call
+        const response = await axios.get(apiUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log(response);
+        // Set Wallet
+        const resp = response.data.data;
+        if(resp === null || resp === undefined) {
+            onClose();
+            return;
+        }
+        setWallet(resp);
+        setWalletName(resp.name);
+        setNotes(resp.description);
+        setBalance(resp.initialBalance);
+        setCurrency(resp.walletCurrency.id);
+        setStatus(resp.walletStatus.id);
+        setColor(resp.walletColor.id);
+      }
+      catch(err) {
+        // set the unsuccessful message
+        if(err.status === 401) { // UnAuthorized
+            localStorage.clear();
+            // Call Logout Endpoint ...
+            navigate('/login');
+        }
+        else if(err.status === 400) {
+            let errs = err.response.data;
+            if(Array.isArray(errs.errors)) {
+                toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+            }
+        }
+      }
+    }
+
+    fetchWallet();
+  }, []);
+
   // Fetch Wallet Data Parts
   useEffect(() => {
     const fetchDataParts = async () => {
       const apiUrl = `${API_BASE_URL}/Wallets/DataParts`;
       try {
         const response = await axios.get(apiUrl);
-
-        console.log(response);
 
         const resp = response.data.data;
         setCurrencies(resp.currency);
@@ -47,7 +92,7 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
     <div className="fixed inset-0 bg-black bg-opacity-40  flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-[15px] w-[432px] h-[567px] shadow-xl text-right">
       <h3 className="text-[18px] mt-8 font-bold leading-[100%] tracking-[0%] text-center mb-10 font-[Tajawal]">
-        محفظة جديدة 
+        تحديث بيانات محفظة
       </h3>
 
 
@@ -85,9 +130,13 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
             >
               <option value='-999' selected>اختر ..</option>
               {
-                currencies.map((ele) => {
-                  return <option value={ele.id} key={ele.id}>{ele.name}</option>
-                })
+                currencies.map((ele) => 
+                    ele.id == currency ? (
+                        <option value={ele.id} key={ele.id} selected >{ele.name}</option>
+                    ) : (
+                        <option value={ele.id} key={ele.id} >{ele.name}</option>
+                    )
+                )
               }
             </select>
           </div>
@@ -103,9 +152,13 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
             >
               <option value='-999' selected>اختر ..</option>
               {
-                statusData.map((ele) => {
-                  return <option value={ele.id} key={ele.id}>{ele.name}</option>
-                })
+                statusData.map((ele) => 
+                    ele.id == status ? (
+                        <option value={ele.id} key={ele.id} selected >{ele.name}</option>
+                    ) : (
+                        <option value={ele.id} key={ele.id} >{ele.name}</option>
+                    )
+                )
               }
             </select>
           </div>
@@ -118,9 +171,13 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
             >
               <option value='-999' selected>اختر ..</option>
               {
-                colors.map((ele) => {
-                  return <option value={ele.id} key={ele.id}>{ele.name}</option>
-                })
+                colors.map((ele) => 
+                    ele.id == color ? (
+                        <option value={ele.id} key={ele.id} selected >{ele.name}</option>
+                    ) : (
+                        <option value={ele.id} key={ele.id} >{ele.name}</option>
+                    )
+                )
               }
             </select>
           </div>
@@ -138,13 +195,13 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
         <div className="flex justify-between gap-4">
           <button
             onClick={() => {
-              onSave({ walletName, notes, balance, status, color, currency });
+              onEdit({ walletName, notes, balance, status, color, currency, walletId });
               walletValidation();
             }}
-            className={`w-[188px] h-[48px] bg-[#16423C] text-white px-8 py-[10px] rounded-[10px] hover:bg-green-800 ${saveLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-[188px] h-[48px] bg-[#16423C] text-white px-8 py-[10px] rounded-[10px] hover:bg-green-800 ${editLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             { 
-              saveLoading ? 'جاري الحفظ ..' : 'إنشاء محفظة'
+              editLoading ? 'جاري الحفظ ..' : 'حفظ التعديلات'
             }
           </button>
           <div className="flex justify-between gap-4">
@@ -161,3 +218,5 @@ export default function AddWalletModal({ onClose, onSave, saveLoading }) {
     </div>
   );
 }
+
+export default EditWalletModal

@@ -128,7 +128,7 @@ const ResetPassword = () => {
       });
       
       // Store Some Data
-      localStorage.clear();
+      localStorage.setItem('acc-stat', ACCOUNT_STATUS.INACTIVE);
       localStorage.setItem('message', response.data.message);
       
       // Redirect to login
@@ -202,7 +202,7 @@ const ResetPassword = () => {
                 )}
 
               <div className="flex flex-col w-full gap-2 mt-5 mb-2">
-                <label className="text-maincolor font-bold text-[14px]" htmlFor="email">كلمة المرور الجدبدة</label>
+                <label className="text-maincolor font-bold text-[14px]" htmlFor="email">كلمة المرور الجديدة</label>
                 <input 
                   dir="ltr" 
                   id="password"

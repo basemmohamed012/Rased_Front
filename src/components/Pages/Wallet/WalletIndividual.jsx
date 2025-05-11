@@ -1,134 +1,352 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import wallettt from '../../../assets/images/wallettt.svg'
-import mageFiltter from '../../../assets/images/mage_filter.svg'
 import Dropdown from '../../../Layout/DropDown/DropDown.jsx';
 import AddWalletModal from "./Addwalletindividual.jsx";
 import { useNavigate } from "react-router-dom";
+import { ACCOUNT_STATUS, API_BASE_URL } from "../../../constants/AppConstants.js";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { decryptToken } from '../../helpers/TokenHelper'
+import { Eye, PenBoxIcon, Trash2Icon } from "lucide-react";
+import EditWalletModal from "./EditWalletModal.jsx";
+import DeleteWalletModal from "./DeleteWalletModal.jsx";
+
 export default function IndividualWalletsSection() {
-  const navigate =useNavigate();
+  const navigate = useNavigate();
+  // Loadings
+  const [loading, setLoading] = useState(true);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  // Wallets
+  const [wallets, setWallets] = useState([]);
+  const [addedWallet, setAddedWallet] = useState(false);
+  const [walletId, setWalletId] = useState(null);
+  // Token
+  const [token, setToken] = useState('');
+  // Modals
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Get the Wallets from backend
+  useEffect(() => {
+      // check if the account is active
+      if(localStorage.getItem('acc-stat') !== ACCOUNT_STATUS.ACTIVE) {
+        // Call the Logout from Backend ..
+        localStorage.clear();
+        navigate('/login');
+      }
+      // Get the token
+      const accessToken = localStorage.getItem('acc-token');
+      let originalAcessToken = '';
+      if(!accessToken) {
+          navigate('/login');
+          return;
+      }
+      else {
+          // decrypt the access token
+          originalAcessToken = decryptToken(accessToken);
+          setToken(originalAcessToken); // state for the token
+      }
+
+      // Fetch Data
+      const fetchWallets = async () => {
+        // Fetching the data
+        try {
+          setLoading(true);
+          setWallets([]);
+
+          const apiUrl = `${API_BASE_URL}/Wallets/All`;
+
+          // API Call
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${originalAcessToken}`
+            }
+          });
+          
+          // Check errors
+          if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
+              setWallets(response.data.data);
+          }
+      } catch (err) {
+          // set the unsuccessful message
+          if(err.status === 401) { // UnAuthorized
+            localStorage.clear();
+            // Call Logout Endpoint ...
+            navigate('/login');
+          }
+          if(err.response && err.response.data.errors.length > 0)
+            toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
+      } finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000)
+      }
+      }
+
+      fetchWallets();
+  }, [addedWallet]);
+
   const Walletdetails = (wallet) => {
     navigate('/details', { state: { wallet } });
   };
   
- 
-  const [wallets, setWallets] = useState([
-    {
-      id: 1,
-      name: "محفظتي الأولى",
-      amount: 15000,
-      type: "شخصية",
-      currency: "جنيه مصري",
-      creationDate: "10 مارس 2025",
-      totalActivity: 6.25,
-      pieData: [
-        { name: "كاش", value: 5000 },
-        { name: "تحويلات", value: 7000 },
-        { name: "فيزا", value: 3000 }
-      ]
-    },
-    {
-      id: 2,
-      name: "محفظتي الثانية",
-      amount: 10000,
-      type: "شخصية",
-      currency: "دولار أمريكي",
-      creationDate: "5 أبريل 2025",
-      totalActivity: 4.5,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 3000 },
-        { name: "فيزا", value: 2000 }
-      ]
-    },
-    {
-      id: 3,
-      name: "محفظتي الثانية",
-      amount: 90000,
-      type: "شخصية",
-      currency: "دولار أمريكي",
-      creationDate: "5 أبريل 2025",
-      totalActivity: 4.5,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ]
-    },
-  ]);
-  
-  const [showModal, setShowModal] = useState(false);
+  const handleSave = async (newWallet) => {
+    try{
+      setSaveLoading(true);
 
-  const handleSave = (newWallet) => {
-    setWallets(prev => [
-      ...prev,
-      {
-        id: Date.now(),
-        name: newWallet.walletName,
-        amount: Number(newWallet.balance), // خليه رقم مش نص
-        currency: newWallet.currency,
-        type: newWallet.walletType,
-        creationDate: new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }),
-        totalActivity: 0, // أو أي قيمة افتراضية
-        pieData: [], // مبدئياً فاضي
+      const apiUrl = `${API_BASE_URL}/Wallets/Create`;
+      
+      const walletBody = {
+        Name: newWallet.walletName,
+        Description: newWallet.notes,
+        InitialBalance: newWallet.balance,
+        WalletStatusId: newWallet.status,
+        ColorTypeId: newWallet.color,
+        CurrencyId: newWallet.currency
       }
-    ]);
-    setShowModal(false);
+      // API Call
+      const response = await axios.post(apiUrl, walletBody, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Check errors
+      if(response.data.succeeded === false || response === null || response.data === null) {
+          toast.error(response.data.message || 'خطأ في إنشاء محفظة جديدة!');
+          return;
+      }
+      else {
+        toast.success(response.data.message);
+        setShowModal(false);
+        setAddedWallet((prev) => !prev);
+        return;
+      }
+    }
+    catch(err) {
+      console.log(err);
+      // set the unsuccessful message
+      if(err.status === 401) { // UnAuthorized
+        localStorage.clear();
+        // Call Logout Endpoint ...
+        navigate('/login');
+      }
+      else if(err.status === 400) {
+        let errs = err.response.data;
+        if(Array.isArray(errs.errors)) {
+          toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+        }
+        // else {
+        //   toast.error(errs.title || 'حدث خطأ ما');
+        // }
+      }
+    }
+    finally {
+      setSaveLoading(false);
+    }
+  };
+
+  const handleEdit = async (updatedWallet) => {
+    try{
+      setEditLoading(true);
+
+      const apiUrl = `${API_BASE_URL}/Wallets/Update/${updatedWallet.walletId}`;
+      
+      const walletBody = {
+        Name: updatedWallet.walletName,
+        Description: updatedWallet.notes,
+        InitialBalance: updatedWallet.balance,
+        WalletStatusId: updatedWallet.status,
+        ColorTypeId: updatedWallet.color,
+        CurrencyId: updatedWallet.currency
+      }
+      // API Call
+      const response = await axios.put(apiUrl, walletBody, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Check errors
+      if(response.data.succeeded === false || response === null) {
+          toast.error(response.data.message || 'خطأ في إنشاء محفظة جديدة!');
+          return;
+      }
+      else {
+        toast.success(response.data.message);
+        setShowEditModal(false);
+        setAddedWallet((prev) => !prev);
+        return;
+      }
+    }
+    catch(err) {
+      console.log(err);
+      // set the unsuccessful message
+      if(err.status === 401) { // UnAuthorized
+        localStorage.clear();
+        // Call Logout Endpoint ...
+        navigate('/login');
+      }
+      else if(err.status === 400) {
+        let errs = err.response.data;
+        if(Array.isArray(errs.errors)) {
+          toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+        }
+      }
+    }
+    finally {
+      setEditLoading(false);
+    }
+  };
+
+  const handleDelete = async (data) => {
+    try{
+      setDeleteLoading(true);
+
+      const apiUrl = `${API_BASE_URL}/Wallets/Delete/${data.walletId}`;
+      
+      // API Call
+      const response = await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Check errors
+      if(response.data.succeeded === false || response === null) {
+          toast.error(response.data.message || 'خطأ في إنشاء محفظة جديدة!');
+          return;
+      }
+      else {
+        toast.success(response.data.message);
+        setShowDeleteModal(false);
+        setAddedWallet((prev) => !prev);
+        return;
+      }
+    }
+    catch(err) {
+      // set the unsuccessful message
+      if(err.status === 401) { // UnAuthorized
+        localStorage.clear();
+        // Call Logout Endpoint ...
+        navigate('/login');
+      }
+      else if(err.status === 400) {
+        let errs = err.response.data;
+        if(Array.isArray(errs.errors)) {
+          toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+        }
+      }
+    }
+    finally {
+      setDeleteLoading(false);
+    }
   };
   
   return (
     <div className="p-6 w-[1020px] h-auto text-right font-sans">
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-6">
         {/* العنوان + تصفية */}
         <div className="justify-between items-center mb-6">
-          <div className="flex items-center gap-2 text-black text-lg font-bold">
-            <span className="text-[14px] font-bold">تصفية</span>
-            <img src={mageFiltter} alt="" />
-          </div>
-          <h2 className="text-[20px] font-bold">المحافظ الفردية</h2>
+          
+          <h2 className="text-[20px] font-bold">المحافظ الشخصية</h2>
         </div>
         <Dropdown />
       </div>
-
-      {/* كروت المحافظ */}
-      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-        {wallets.map((wallet) => (
-          <div
-            key={wallet.id}
-            className="bg-white shadow-xl border-2 rounded-xl p-6 text-center"
-          >
-            <div className="text-green-700 text-4xl flex justify-center mb-2">
-              <img src={wallettt} alt="" />
+    
+      {
+        loading ? (
+          <div className="flex justify-center items-start min-h-screen">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-maincolor mx-auto"></div>
+              {/* <p className="mt-2 text-maincolor">جاري التحميل ⌛</p> */}
             </div>
-            <h3 className="font-bold text-[20px] mb-1">{wallet.name}</h3>
-            <p className="text-[#ADAAAA] mb-2">{wallet.amount} {wallet.currency}</p>
-            <div className="text-[14px] text-gray-500 flex justify-between gap-5 px-4">
-              <span className="text-[#ADAAAA]">نوع المحفظة :</span>
-              <span className="text-[#ADAAAA]">{wallet.type}</span>
-            </div>
-            <button 
-  onClick={() => Walletdetails(wallet)}
-  className="mt-3 relative left-[9px] w-[200px] bg-[#16423C] text-white py-2 rounded-[15px] text-sm hover:bg-white hover:text-[#16423C] hover:border-2 hover:border-[#16423C] transition">
-    عرض التفاصيل
-</button>
-
           </div>
-        ))}
+        ) : (
+        <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+          {
+          wallets.length > 0 ? (
+          wallets.map((wallet) => (
+            <div
+              key={wallet.id}
+              className="bg-white shadow-xl border-2 rounded-xl p-6 text-center"
+            >
+              <div className="text-green-700 text-4xl flex justify-center mb-2">
+                <img src={wallettt} alt="" />
+              </div>
+              <h3 className="font-bold text-[20px] mb-1">{wallet.name}</h3>
+              <p className="text-[#ADAAAA] mb-2">{wallet.totalBalance.toFixed(2)} {wallet.walletCurrency.name}</p>
+              <div className="text-[14px] text-gray-500 flex justify-center gap-5 px-4">
+                <span className={`${wallet.walletStatus.name == 'نشط' ? 'text-green-600' : 'text-red-600'}`}>{wallet.walletStatus.name}</span>
+              </div>
+              <div className="mt-6 flex justify-center gap-6">
+                <button 
+                  className="">
+                  <Eye className="text-maincolor cursor-pointer hover:text-gray-500" />
+                </button>
 
-        {/* زر الإضافة */}
-        <div
-          onClick={() => setShowModal(true)}
-          className="bg-white shadow-xl border-dashed border-2 border-gray-300 w-[240px] h-[223px] rounded-xl p-6 flex flex-col justify-center items-center cursor-pointer hover:bg-gray-50 transition"
-        >
-          <span className="text-3xl text-[#16423C] font-bold">+</span>
-          <span className="mt-2 text-sm text-gray-500">إضافة</span>
+                <button 
+                  onClick={() => { setShowEditModal(true); setWalletId(wallet.id); }}
+                  className="">
+                  <PenBoxIcon className="text-warning cursor-pointer hover:text-gray-500" />
+                </button>
+
+                <button 
+                  onClick={() => { setShowDeleteModal(true); setWalletId(wallet.id); }}
+                  className="">
+                  <Trash2Icon className="text-error cursor-pointer hover:text-gray-500" />
+                </button>
+              </div>
+
+            </div>
+          ))) : (
+            <div className="flex justify-center items-center text-error">لا يوجد لديك محافظ شخصية حتي الآن</div>
+          )
+        }
+
+          {/* زر الإضافة */}
+          <div
+            onClick={() => setShowAddModal(true)}
+            className="bg-white shadow-xl border-dashed border-2 border-gray-300 w-[240px] h-[223px] rounded-xl p-6 flex flex-col justify-center items-center cursor-pointer hover:bg-gray-50 transition"
+          >
+            <span className="text-3xl text-[#16423C] font-bold">+</span>
+            <span className="mt-2 text-sm text-gray-500">إضافة</span>
+          </div>
         </div>
-      </div>
+        )
+      }
+      
 
       {/* مودال الإضافة */}
-      {showModal && (
+      {showAddModal && (
         <AddWalletModal
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowAddModal(false)}
           onSave={handleSave}
+          saveLoading={saveLoading}
+        />
+      )}
+
+      {/* مودال التعديل */}
+      {showEditModal && (
+        <EditWalletModal
+          onClose={() => setShowEditModal(false)}
+          onEdit={handleEdit}
+          walletId={walletId}
+          token={token}
+          editLoading={editLoading}
+        />
+      )}
+
+      {/* مودال الحذف */}
+      {showDeleteModal && (
+        <DeleteWalletModal
+          onClose={() => setShowDeleteModal(false)}
+          onDelete={handleDelete}
+          walletId={walletId}
+          deleteLoading={deleteLoading}
         />
       )}
     </div>

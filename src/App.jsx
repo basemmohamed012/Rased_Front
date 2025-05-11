@@ -16,7 +16,7 @@ import ResetPwdVerify from './components/auth/ResetPwdVerify.jsx';
 import Notification from './components/Pages/Notifications/Notifications.jsx'
 import ShowWalletIndividualOnly from './components/Pages/Wallet/ShowWalletIndividualOnly.jsx';
 import ShowSharedWalletOnly from './components/Pages/SharedWallet/ShowSharedWalletOnly.jsx'
-import  Wallet  from './components/Pages/Wallet/Wallet.jsx';
+
 function App() {
   useEffect(() => {
     AOS.init({
@@ -36,11 +36,14 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path='/reset-password/verify' element={<ResetPwdVerify />} />
           <Route path='/reset-password' element={<ResetPassword />} />
+
           <Route path='/showWalletIndividual' element={<ShowWalletIndividualOnly />} />
+
           <Route path='/ShowSharedWallet' element={<ShowSharedWalletOnly />} />
-          <Route path="/profile" element={<DashboardNew />} />
+          
+          <Route path="/dashboard" element={<DashboardNew />} />
           <Route path="/wallets" element={<Wallet />} />
-          <Route path="/dashboard" element={<Wallet />} />
+          <Route path="/profile" element={<Wallet />} />
           <Route path='/notification' element={<Notification />} />
         </Routes>
 

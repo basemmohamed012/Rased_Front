@@ -20,7 +20,7 @@ const SidebarWallet = () => {
 
 
   const handleProfileClick = () => {
-    navigate('/profile');
+    navigate('/dashboard');
   };
 
   const ShowWalletIndividual = () => {
@@ -61,7 +61,7 @@ const SidebarWallet = () => {
 {/* نظرة عامة */}
 <button onClick={handleProfileClick}>
   <div className={`flex items-center gap-2 mr-2 mt-10 px-2 py-2 rounded-[15px] transition-all duration-200 ${
-    location.pathname === '/profile' ? 'w-[139px] h-[52px] border-2 rounded-[30px] bg-white text-black' : ''
+    location.pathname === '/dashboard' ? 'w-[139px] h-[52px] border-2 rounded-[30px] bg-white text-black' : ''
   }`}>
     <img src={nazra} alt="نظرة عامة" />
     <span className="text-[16px] font-bold">نظرة عامة</span>
@@ -107,7 +107,7 @@ const SidebarWallet = () => {
         <button
         onClick={() => {
           Wallets(); 
-          dropdownOpen(true);
+          setDropdownOpen(true);
         }}
         className={`w-full text-right text-[16px] px-4 py-2 hover:bg-gray-100 ${
           location.pathname === '/wallets'

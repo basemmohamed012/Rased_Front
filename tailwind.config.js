@@ -7,6 +7,9 @@ export default {
       colors: {
         maincolor: "#16423C",
         graycolor: "#D3D8D7",
+        success: "rgb(7 188 30)",
+        error: "rgb(222 0 0)",
+        warning: "rgb(204 164 8)",
       },
       fontFamily: {
         cairo: ["Cairo", "sans-serif"],

@@ -49,7 +49,7 @@ const NavbarWallet = () => {
         <div>
             <div className='flex justify-around mt-5'>
 
-                <div>
+                <div onClick={() => navigate('/')} className='cursor-pointer'>
                     <img src={logo} className='ml-40 ' />
                 </div>
 

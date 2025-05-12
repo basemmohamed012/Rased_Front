@@ -7,7 +7,7 @@ import twitterIcon from '../../../assets/images/logo-twitter.svg';
 
 const Footer = () => {
   return (
-    <footer data-aos="zoom-in-up" className='w-screen overflow-hidden'>
+    <footer className='w-screen overflow-hidden'>
       <div className="w-full bg-gradient-to-r from-[#16423C] to-[#566319] px-6 text-white py-10 dark:bg-[#282828]">
         <div>
           {/* Main content section */}

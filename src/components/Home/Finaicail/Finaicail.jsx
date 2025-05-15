@@ -7,7 +7,10 @@ import confedince from '../../../assets/images/confidence.svg'
 import goalll from "../../../assets/images/Layer.svg";
 import www from "../../../assets/images/ss.svg";
 import rabot from "../../../assets/images/robot.svg";
+
 const Financial = () => {
+  
+
   return (
     
     <section data-aos="fade-up" className="py-12 px-4 md:px-12 bg-white relative bottom-64 md:bottom-10 md:left-5  dark:bg-black">
@@ -46,7 +49,8 @@ const Financial = () => {
         <p className="text-sm md:text-base leading-relaxed mt-12">
         من خلال هذه الميزة، يمكنك تتبّع كل نفقـاتك اليومية بدقة وفي مكان واحد. سواء كانت مشتريات صغيرة أو دفعات شهرية كبيرة، يتم تسجيل كل عملية تلقائيًا، مما يساعدك على التحكم الكامل في أموالك وتحقيق استقرار مالي.
         </p>
-        <button className="bg-white w-[161px] h-[54px] text-green-900 font-semibold px-6 py-2 rounded-full hover:bg-green-100 mt-10 transition">
+        <button
+         className="bg-white w-[161px] h-[54px] text-green-900 font-semibold px-6 py-2 rounded-full hover:bg-green-100 mt-10 transition">
           <div className="flex gap-x-10">
             <p>تتبّع الآن</p>
             <img src={arrowbtn} alt="" />

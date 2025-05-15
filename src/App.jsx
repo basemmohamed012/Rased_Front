@@ -16,6 +16,8 @@ import ResetPwdVerify from './components/auth/ResetPwdVerify.jsx';
 import Notification from './components/Pages/Notifications/Notifications.jsx'
 import ShowWalletIndividualOnly from './components/Pages/Wallet/ShowWalletIndividualOnly.jsx';
 import ShowSharedWalletOnly from './components/Pages/SharedWallet/ShowSharedWalletOnly.jsx'
+import Profileuser from './components/Pages/User/ProfileUser.jsx'
+import Budget from './components/Pages/Budget/Budget.jsx';
 
 function App() {
   useEffect(() => {
@@ -43,8 +45,9 @@ function App() {
           
           <Route path="/dashboard" element={<DashboardNew />} />
           <Route path="/wallets" element={<Wallet />} />
-          <Route path="/profile" element={<Wallet />} />
+          <Route path="/profile" element={<Profileuser />} />
           <Route path='/notification' element={<Notification />} />
+          <Route path='/budget' element={<Budget />} />
         </Routes>
 
       </ErrorBoundary>

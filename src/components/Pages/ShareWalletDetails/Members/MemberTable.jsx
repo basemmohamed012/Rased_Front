@@ -178,7 +178,7 @@ export default function MembersTable() {
   id="email"
   type="email"
   placeholder="اكتب البريد الالكتروني الخاص بصديقك هنا"
-  className="w-[384px] h-[37px] border border-gray-300 text-[14px] text-[#BBB6B6] rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-green-600 text-center"
+  className="w-[384px] h-[37px] border border-graycolor focus:border-maincolor focus:text-black text-[14px] text-[#BBB6B6] rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-green-600 text-center"
 />
 
 

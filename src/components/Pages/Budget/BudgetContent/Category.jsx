@@ -42,7 +42,7 @@ const Category = () => {
               <label className="block mb-1 font-semibold">اسم الفئة</label>
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded px-3 py-2 text-right"
+                className="w-full border border-graycolor focus:border-maincolor focus:text-black rounded px-3 py-2 text-right"
                 placeholder="اكتب اسم الميزانية هنا"
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
@@ -53,7 +53,7 @@ const Category = () => {
               <label className="block mb-1 font-semibold">المبلغ</label>
               <input
                 type="number"
-                className="w-full border border-gray-300 rounded px-3 py-2 text-right"
+                className="w-full border border-graycolor focus:border-maincolor focus:text-black rounded px-3 py-2 text-right"
                 placeholder="0.0$"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}

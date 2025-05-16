@@ -37,11 +37,11 @@ export default function BudgetForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block mb-1 font-bold text-right">الاسم</label>
+            <label className="block mb-1 font-bold text-right ">الاسم</label>
             <input
               type="text"
               name="name"
-              className="w-full text-[#D3CACA] border rounded px-3 py-2"
+              className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
               placeholder="أدخل الاسم هنا"
               value={form.name}
               onChange={handleChange}
@@ -52,7 +52,7 @@ export default function BudgetForm() {
             <input
               type="number"
               name="monthlyLimit"
-              className="w-full text-[#D3CACA] border rounded px-3 py-2"
+              className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
               placeholder="0.0"
               value={form.monthlyLimit}
               onChange={handleChange}
@@ -65,7 +65,7 @@ export default function BudgetForm() {
           <input
             type="text"
             name="description"
-            className="w-full text-[#D3CACA] border rounded px-3 py-2"
+            className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
             placeholder="أدخل تفاصيل عن الميزانية"
             value={form.description}
             onChange={handleChange}
@@ -78,7 +78,7 @@ export default function BudgetForm() {
             <input
               type="date"
               name="startDate"
-              className="w-full text-[#D3CACA] border rounded px-3 py-2"
+              className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
               value={form.startDate}
               onChange={handleChange}
             />
@@ -88,7 +88,7 @@ export default function BudgetForm() {
             <input
               type="date"
               name="endDate"
-              className="w-full text-[#D3CACA] border rounded px-3 py-2"
+              className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
               value={form.endDate}
               onChange={handleChange}
             />
@@ -100,7 +100,7 @@ export default function BudgetForm() {
           <input
             type="text"
             name="category"
-            className="w-full text-[#D3CACA] border rounded px-3 py-2"
+            className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
             placeholder="اختر فئة موجودة أو أنشئ فئة جديدة"
             value={form.category}
             onChange={handleChange}
@@ -112,7 +112,7 @@ export default function BudgetForm() {
           <input
             type="date"
             name="startDay"
-            className="w-full text-[#D3CACA] border rounded px-3 py-2"
+            className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
             value={form.startDay}
             onChange={handleChange}
           />

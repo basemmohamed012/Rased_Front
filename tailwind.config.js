@@ -6,6 +6,8 @@ export default {
     extend: {
       colors: {
         maincolor: "#16423C",
+        secondcolor: "rgb(31 105 95)",
+        thirdcolor: "rgb(155 155 155)",
         graycolor: "#D3D8D7",
         success: "rgb(7 188 30)",
         error: "rgb(222 0 0)",

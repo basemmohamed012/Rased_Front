@@ -121,7 +121,7 @@ export default function IndividualWalletsSection() {
       }
       else {
         toast.success(response.data.message);
-        setShowModal(false);
+        setShowAddModal(false);
         setAddedWallet((prev) => !prev);
         return;
       }

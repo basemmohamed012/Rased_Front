@@ -18,6 +18,10 @@ import ShowWalletIndividualOnly from './components/Pages/Wallet/ShowWalletIndivi
 import ShowSharedWalletOnly from './components/Pages/SharedWallet/ShowSharedWalletOnly.jsx'
 import Profileuser from './components/Pages/User/ProfileUser.jsx'
 import Budget from './components/Pages/Budget/Budget.jsx';
+import AddNewBudget from './components/Pages/Budget/BudgetContent/AddNewBudget.jsx';
+import Expenses from './components/Pages/Expenses/Expenses.jsx';
+import Income from './components/Pages/Income/Income.jsx';
+import BudgetWalletsPage from './components/Pages/Extensions/BudgetWalletsPage.jsx';
 
 function App() {
   useEffect(() => {
@@ -47,7 +51,16 @@ function App() {
           <Route path="/wallets" element={<Wallet />} />
           <Route path="/profile" element={<Profileuser />} />
           <Route path='/notification' element={<Notification />} />
+          
+          {/* Budgets */}
           <Route path='/budget' element={<Budget />} />
+          <Route path='/budget-wallets' element={<BudgetWalletsPage />} />
+          <Route path='/add-budget' element={<AddNewBudget />} />
+
+          {/* Incomes */}
+          <Route path='/income' element={<Income />} />
+
+          <Route path='/expenses' element={<Expenses />} />
         </Routes>
 
       </ErrorBoundary>

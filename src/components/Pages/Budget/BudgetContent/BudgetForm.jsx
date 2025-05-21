@@ -1,24 +1,106 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ACCOUNT_STATUS, API_BASE_URL } from "../../../../constants/AppConstants.js";
+import { Spinner } from '../../../helpers/Spinner';
+import axios from "axios";
+import { toast } from "react-toastify";
+import { decryptToken } from '../../../helpers/TokenHelper'
 
 export default function BudgetForm() {
+  const navigate = useNavigate();
+  const [walletName, setWalletName] = useState('');
+  const [walletId, setWalletId] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [token, setToken] = useState('');
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [form, setForm] = useState({
-    name: '',
-    monthlyLimit: '',
-    description: '',
-    startDate: '',
-    endDate: '',
-    recurrenceDate: '',
-    category: '',
-    startDay: '',
-    carryOver: true,
+    WalletId: walletId,
+    SharedWalletId: '',
+    Name: '',
+    StartDate: '',
+    EndDate: '',
+    CategoryName: '',
+    SubCategoryId: '',
+    BudgetAmount: ''
   });
 
+  // Get the Wallets from backend
+  useEffect(() => {
+      // check if the account is active
+      if(localStorage.getItem('acc-stat') !== ACCOUNT_STATUS.ACTIVE) {
+        // Call the Logout from Backend ..
+        localStorage.clear();
+        navigate('/login');
+      }
+      // Get the token
+      const accessToken = localStorage.getItem('acc-token');
+      let originalAcessToken = '';
+      if(!accessToken) {
+          navigate('/login');
+          return;
+      }
+      else {
+          // decrypt the access token
+          originalAcessToken = decryptToken(accessToken);
+          setToken(originalAcessToken);
+          
+          // Get the required data
+          setWalletName(localStorage.getItem('walletName'));
+          setWalletId(localStorage.getItem('walletId')); 
+          setCurrency(localStorage.getItem('walletCurrency'));
+      }
+
+      // Fetch Categories Data
+      const fetchCategories = async () => {
+        // Fetching the data
+        try {
+          const apiUrl = `${API_BASE_URL}/Categories/All`;
+
+          // API Call
+          const response = await axios.get(apiUrl);
+          
+          // Check errors
+          if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
+              setCategories(response.data.data);
+          }
+        } catch (err) {
+            if(err.response && err.response.data.errors.length > 0)
+              toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
+        }
+      }
+
+      fetchCategories();
+    }, []);
+  
+  // Update subcategories when category changes
+  useEffect(() => {
+    if (form.CategoryName) {
+      const selectedCategory = categories.find(
+        category => category.name === form.CategoryName
+      );
+      
+      if (selectedCategory) {
+        setFilteredSubcategories(selectedCategory.subCategories);
+      } else {
+        setFilteredSubcategories([]);
+      }
+      
+      // Reset subcategory selection when category changes
+      setForm(prev => ({ ...prev, SubCategoryId: "" }));
+    } else {
+      setFilteredSubcategories([]);
+    }
+  }, [form.CategoryName]);
+
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: value,
     });
+    console.log(form);
   };
 
   const handleSubmit = (e) => {
@@ -26,12 +108,24 @@ export default function BudgetForm() {
     console.log('Form submitted:', form);
   };
 
+  const handleCancel = () => {
+    navigate('/budget');
+  }
+
   return (
-    <div>
-      <h2 className="text-[20px] font-bold  mb-2 ">إنشاء ميزانية جديدة</h2>
-       <p className='text-[#666262] text-[14px] font-semibold ' >
-        املأ البيانات التالية لإضافة ميزانية جديدة إلي حسابك
-       </p>
+    <div className='container mt-6'>
+      <div className='flex justify-between items-center'>
+        <div className='flex-col gap-2 justify-start'>
+          <h2 className="text-[20px] font-bold text-maincolor  mb-2 ">إنشاء ميزانية جديدة</h2>
+          {/* <p className='text-thirdcolor text-[14px] font-semibold ' >
+            املأ البيانات التالية لإضافة ميزانية جديدة إلي حسابك
+          </p> */}
+        </div>
+        <div className='flex justify-end items-center gap-6'>
+          <p className='text-maincolor text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
+          <p className='text-maincolor font-semibold'><span className='text-3xl'>💰</span> {currency}</p>
+        </div>
+      </div>
     <div className="w-[1020px] h-auto mx-auto bg-white p-8 rounded-lg shadow mt-8">
       
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -40,36 +134,24 @@ export default function BudgetForm() {
             <label className="block mb-1 font-bold text-right ">الاسم</label>
             <input
               type="text"
-              name="name"
+              name="Name"
               className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
               placeholder="أدخل الاسم هنا"
-              value={form.name}
+              value={form.Name}
               onChange={handleChange}
             />
           </div>
           <div>
-            <label className="block mb-1 font-bold text-right">الحد الشهري</label>
+            <label className="block mb-1 font-bold text-right">الحد الشهري - الميزانية</label>
             <input
               type="number"
-              name="monthlyLimit"
+              name="BudgetAmount"
               className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
               placeholder="0.0"
-              value={form.monthlyLimit}
+              value={form.BudgetAmount}
               onChange={handleChange}
             />
           </div>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-bold text-right">الوصف</label>
-          <input
-            type="text"
-            name="description"
-            className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
-            placeholder="أدخل تفاصيل عن الميزانية"
-            value={form.description}
-            onChange={handleChange}
-          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -79,7 +161,7 @@ export default function BudgetForm() {
               type="date"
               name="startDate"
               className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
-              value={form.startDate}
+              value={form.StartDate}
               onChange={handleChange}
             />
           </div>
@@ -89,25 +171,48 @@ export default function BudgetForm() {
               type="date"
               name="endDate"
               className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
-              value={form.endDate}
+              value={form.EndDate}
               onChange={handleChange}
             />
           </div>
         </div>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-         <div>
-          <label className="block mb-1 font-bold text-right">الفئة</label>
-          <input
-            type="text"
-            name="category"
-            className="w-full text-[#D3CACA] border-2 rounded px-3 py-2 border-graycolor focus:border-maincolor focus:text-black"
-            placeholder="اختر فئة موجودة أو أنشئ فئة جديدة"
-            value={form.category}
-            onChange={handleChange}
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1 font-bold text-right">الفئة</label>
+            <select
+              name="CategoryName"
+              className="w-full text-gray-500 border-2 rounded px-3 py-2 border-gray-300 focus:border-maincolor focus:text-black"
+              value={form.CategoryName}
+              onChange={handleChange}
+            >
+              <option value="">اختـــــــر</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div>
+          <div>
+            <label className="block mb-1 font-bold text-right">الفئة الفرعية</label>
+            <select
+              name="SubCategoryId"
+              className="w-full text-gray-500 border-2 rounded px-3 py-2 border-gray-300 focus:border-maincolor focus:text-black"
+              value={form.SubCategoryId}
+              onChange={handleChange}
+              disabled={!form.CategoryName} // Disable if no category selected
+            >
+              <option value="">اختـــــــر</option>
+              {filteredSubcategories.map(subcategory => (
+                <option key={subcategory.id} value={subcategory.id}>
+                  {subcategory.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+        {/* <div>
           <label className="block mb-1 font-bold text-right">يوم البدء</label>
           <input
             type="date"
@@ -116,14 +221,14 @@ export default function BudgetForm() {
             value={form.startDay}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
         </div>
 
-       
+      
 
         
 
-        <div className=''>
+        {/* <div className=''>
           <div className="flex items-center  gap-2 justify-start">
           <input
             type="checkbox"
@@ -133,26 +238,25 @@ export default function BudgetForm() {
             className="w-4 h-4"
           />
           <label className="text-right font-bold">ترحيل فائض الميزانية للشهر القادم</label>
-        </div>
+        </div> */}
 
-        <div className="flex justify-start gap-8 mt-10">
+        <div className="flex justify-start gap-8 mt-10 pt-6">
 
-           <button
+          <button
             type="submit"
-            className="px-6 py-2 w-[206px] h-[48px] bg-[#16423C] text-white rounded-[10px] "
+            className="px-6 py-2 w-[206px] h-[48px] bg-maincolor hover:bg-secondcolor text-white rounded-[10px] "
           >
             إنشاء ميزانية
           </button>
 
           <button
             type="button"
-            onClick={() => console.log('Canceled')}
+            onClick={handleCancel}
             className="px-6 py-2 border-2 w-[112px] h-[48px] text-[#16423C] border-[#16423C] rounded-[10px]  "
           >
-            إلغاء
+            رجـــوع
           </button>
-         
-        </div>
+        
         </div>
       </form>
     </div>

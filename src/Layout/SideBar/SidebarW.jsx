@@ -19,6 +19,10 @@ const SidebarWallet = () => {
   const isWalletPage = location.pathname === '/wallets' || location.pathname === '/details' || location.pathname === '/detailsSharedWallet'  || location.pathname ==='/showWalletIndividual';
 
 
+  const handleBudgetWallets = () => {
+    navigate('/budget');
+  }
+
   const handleProfileClick = () => {
     navigate('/dashboard');
   };
@@ -150,10 +154,17 @@ const SidebarWallet = () => {
 </div>
 
 {/* المعاملات */}
-<div className="flex items-center gap-2 mt-4 mr-4">
+{/* <div className="flex items-center gap-2 mt-4 mr-4">
   <div className="flex gap-2">
     <img src={nazra} alt="المعاملات" />
     <span className="font-bold text-[14px]">المعاملات</span>
+  </div>
+</div> */}
+
+<div className="flex items-center gap-2 mt-4 mr-4">
+  <div onClick={handleBudgetWallets} className="flex gap-2 cursor-pointer">
+    <img src={nazra} alt="ميزانية" />
+    <span className="font-bold text-[14px]">الميزانيـــــات</span>
   </div>
 </div>
 

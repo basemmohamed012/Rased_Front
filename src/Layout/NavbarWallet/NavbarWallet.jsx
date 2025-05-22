@@ -22,8 +22,8 @@ const NavbarWallet = () => {
     const accessToken = localStorage.getItem('acc-token');
     useEffect(() => {
         if(!accessToken) {
-            navigate('/login');
-            return;
+            // navigate('/login');
+            // return;
         }
         else {
             // decrypt the access token

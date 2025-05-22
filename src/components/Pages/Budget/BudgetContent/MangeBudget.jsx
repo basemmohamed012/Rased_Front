@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 const MangeBudget = () => {
   const navigate = useNavigate();
  const handleClick = () => {
-  navigate('/addBudget');
+  navigate('/budget-wallets');
 }
 
   return (

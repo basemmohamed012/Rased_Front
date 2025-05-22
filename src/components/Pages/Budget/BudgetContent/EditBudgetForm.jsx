@@ -6,8 +6,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { decryptToken } from '../../../helpers/TokenHelper'
 
-export default function BudgetForm() {
-  const navigate = useNavigate();
+const EditBudgetForm = () => {
+    const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [walletName, setWalletName] = useState('');
   // const [walletId, setWalletId] = useState('');
@@ -166,6 +166,7 @@ export default function BudgetForm() {
     navigate('/budget');
   }
 
+
   return (
     <div className='container mt-6'>
       <div className='flex justify-between items-center'>
@@ -317,5 +318,7 @@ export default function BudgetForm() {
       </form>
     </div>
     </div>
-  );
+  )
 }
+
+export default EditBudgetForm

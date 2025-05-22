@@ -5,6 +5,8 @@ import SidebarW from '../../../../Layout/SideBar/SidebarW.jsx';
 import BudgetForm from './BudgetForm.jsx';
 import Footer from '../../../Home/Footer/Footer.jsx';
 import { Spinner } from '../../../helpers/Spinner.jsx';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 const AddNewBudget = () => {
@@ -43,6 +45,19 @@ const AddNewBudget = () => {
             <div className=" row-span-1 mt-6 ">
               <Footer />
             </div>
+
+            {/* Toastify */}
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light" />
           </div>
         )
       }

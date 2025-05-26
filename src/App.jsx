@@ -23,6 +23,8 @@ import Expenses from './components/Pages/Expenses/Expenses.jsx';
 import Income from './components/Pages/Income/Income.jsx';
 import BudgetWalletsPage from './components/Pages/Extensions/BudgetWalletsPage.jsx';
 import EditUserPage from './components/Pages/User/EditUserPage.jsx';
+import AddNewIncome from './components/Pages/Income/ContentIncome/AddNewIncome.jsx';
+import ShowSharedWalletDetailsSection from './components/Pages/ShareWalletDetails/ShowSharedWalletDetailsSection.jsx';
 
 function App() {
   useEffect(() => {
@@ -37,24 +39,29 @@ function App() {
     <div className='overflow-hidden'>
       <ErrorBoundary>
         <Routes >
+          {/* Home Page */}
           <Route path='/' element={<HomePage />} />
+          
+          {/* Authentication */}
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/verify-otp' element={<VerifyOTPPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path='/reset-password/verify' element={<ResetPwdVerify />} />
           <Route path='/reset-password' element={<ResetPassword />} />
 
-          <Route path='/showWalletIndividual' element={<ShowWalletIndividualOnly />} />
-
-          <Route path='/ShowSharedWallet' element={<ShowSharedWalletOnly />} />
-          
-          <Route path="/dashboard" element={<DashboardNew />} />
-          <Route path="/wallets" element={<Wallet />} />
-
+          {/* User Data */}
           <Route path="/profile" element={<Profileuser />} />
           <Route path="/edit-user" element={<EditUserPage />} />
-          
-          <Route path='/notification' element={<Notification />} />
+
+          {/* Dashboard */}
+          <Route path="/dashboard" element={<DashboardNew />} />
+
+          {/* Wallets */}
+          <Route path='/personal-wallets' element={<ShowWalletIndividualOnly />} />
+
+          {/* Shared Wallets */}
+          <Route path='/shared-wallets' element={<ShowSharedWalletOnly />} />
+          <Route path='/shared-wallets/details' element={<ShowSharedWalletDetailsSection />} />
           
           {/* Budgets */}
           <Route path='/budget' element={<Budget />} />
@@ -63,8 +70,13 @@ function App() {
 
           {/* Incomes */}
           <Route path='/income' element={<Income />} />
-
+          <Route path='/add-income' element={<AddNewIncome />} />
+          
+          {/* Expenses */}
           <Route path='/expenses' element={<Expenses />} />
+
+          {/* <Route path="/wallets" element={<Wallet />} /> */}          
+          <Route path='/notification' element={<Notification />} />
         </Routes>
 
       </ErrorBoundary>

@@ -4,6 +4,8 @@ import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
 
 import Footer from '../../Home/Footer/Footer';
 import SharedWalletsSection from './SharedWalletsSection.jsx';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Wallet = () => {
   return (
@@ -33,6 +35,17 @@ const Wallet = () => {
       <div className=" row-span-1 mt-6 ">
         <Footer />
       </div>
+      <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light" />
     </div>
   );
 };

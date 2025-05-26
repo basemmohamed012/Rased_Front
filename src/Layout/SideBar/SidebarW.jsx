@@ -28,11 +28,11 @@ const SidebarWallet = () => {
   };
 
   const ShowWalletIndividual = () => {
-    navigate('/showWalletIndividual');
+    navigate('/personal-wallets');
   };
 
   const ShowSharedWallet = () => {
-    navigate('/ShowSharedWallet');
+    navigate('/shared-wallets');
   };
 
   const Wallets = () => {
@@ -108,7 +108,7 @@ const SidebarWallet = () => {
   {dropdownOpen && (
     <div className="absolute top-full mt-1 w-[196px] bg-white rounded-[10px] shadow-lg py-2 z-10">
         
-        <button
+        {/* <button
         onClick={() => {
           Wallets(); 
           setDropdownOpen(true);
@@ -120,7 +120,7 @@ const SidebarWallet = () => {
         }`}
       >
          كل محافظي
-      </button>
+      </button> */}
 
       <button
         onClick={() => {
@@ -169,24 +169,24 @@ const SidebarWallet = () => {
 </div>
 
 {/* إنشاء محفظة جديدة */}
-<div className="flex items-center justify-between text-sm cursor-pointer mt-4 mr-4">
+{/* <div className="flex items-center justify-between text-sm cursor-pointer mt-4 mr-4">
   <button>
     <div className="flex gap-2">
       <img src={penwa} alt="إنشاء محفظة جديدة" />
       <span className="font-bold text-[14px]">إنشاء محفظة جديدة</span>
     </div>
   </button>
-</div>
+</div> */}
 
 {/* إنشاء محفظة مشتركة */}
-<div className="flex items-center justify-between text-sm cursor-pointer mt-2 mr-4">
+{/* <div className="flex items-center justify-between text-sm cursor-pointer mt-2 mr-4">
   <button>
     <div className="flex gap-2">
       <img src={sharewa} alt="إنشاء محفظة مشتركة" />
       <span className="font-bold text-[14px]">إنشاء محفظة مشتركة</span>
     </div>
   </button>
-</div>
+</div> */}
 
 </div>
     </div>

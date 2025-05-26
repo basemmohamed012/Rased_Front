@@ -1,257 +1,370 @@
 /* SharedWalletsSection.jsx */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import walletIcon from "../../../assets/images/share.svg";
 import Dropdown from "../../../Layout/DropDown/DropDown.jsx";
-import AddWalletModal from "../SharedWallet/AddSharedWallet.jsx";
 import { useNavigate } from "react-router-dom";
-export default function SharedWalletsSection() {
+import { ACCOUNT_STATUS, API_BASE_URL } from "../../../constants/AppConstants.js";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { decryptToken } from '../../helpers/TokenHelper'
+import { Eye, PenBoxIcon, Trash2Icon, BadgeDollarSignIcon, Users2Icon, LucideLoaderPinwheel, ActivityIcon } from "lucide-react";
+import AddSharedWalletModal from "./AddSharedWalletModal.jsx";
+import EditSharedWalletModal from "./EditSharedWalletModal.jsx";
+import DeleteSharedWalletModal from "./DeleteSharedWalletModal.jsx";
 
+
+export default function SharedWalletsSection() {
   const navigate = useNavigate();
-  const WalletShared = (wallet) => {
-    navigate('/detailsSharedWallet', { state: { wallet } });
+  // Loadings
+  const [loading, setLoading] = useState(true);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  // Wallets
+  const [sharedWallets, setSharedWallets] = useState([]);
+  const [addedWallet, setAddedWallet] = useState(false);
+  const [walletId, setWalletId] = useState(null);
+  // Token
+  const [token, setToken] = useState('');
+  // Modals
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Get the Wallets from backend
+  useEffect(() => {
+      // check if the account is active
+      if(localStorage.getItem('acc-stat') !== ACCOUNT_STATUS.ACTIVE) {
+        // Call the Logout from Backend ..
+        localStorage.clear();
+        navigate('/login');
+      }
+      // Get the token
+      const accessToken = localStorage.getItem('acc-token');
+      let originalAcessToken = '';
+      if(!accessToken) {
+          navigate('/login');
+          return;
+      }
+      else {
+          // decrypt the access token
+          originalAcessToken = decryptToken(accessToken);
+          setToken(originalAcessToken); // state for the token
+      }
+
+      // Fetch Data
+      const fetchWallets = async () => {
+        // Fetching the data
+        try {
+          setLoading(true);
+          setSharedWallets([]);
+
+          const apiUrl = `${API_BASE_URL}/SharedWallets/All`;
+
+          // API Call
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${originalAcessToken}`
+            }
+          });
+          
+          // Check errors
+          if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
+              setSharedWallets(response.data.data);
+          }
+      } catch (err) {
+          // set the unsuccessful message
+          if(err.status === 401) { // UnAuthorized
+            localStorage.clear();
+            // Call Logout Endpoint ...
+            navigate('/login');
+          }
+          if(err.response && err.response.data.errors.length > 0)
+            toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
+      } finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000)
+      }
+      }
+
+      fetchWallets();
+  }, [addedWallet]);
+
+  const Walletdetails = () => {
+    navigate('/shared-wallets/details');
   };
   
-  const [showModal, setShowModal] = useState(false);
-  const [sharedWallets, setSharedWallets] = useState([
-    {
-      id: 1,
-      name: "محفظتي 1"  ,
-      type: "مشتركة",
-      in: "هذا الشهر+ 14.2%",
-      members: 7,
-      owner: " باسم محمد",
-      creationDate: "2024-05-10",
-      currency: "جنيه مصري",
-      amount: 25000,
-      totalActivity: 14.2,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ]
-      ,
-    DataMembers:[
-      { id: 1, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-      { id: 2, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-      { id: 3, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-      { id: 4, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-      { id: 5, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-      { id: 6, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-    ]
+  const handleSave = async (newWallet) => {
+    try{
+      setSaveLoading(true);
+
+      const apiUrl = `${API_BASE_URL}/SharedWallets/Create`;
       
+      const walletBody = {
+        Name: newWallet.walletName,
+        Description: newWallet.notes,
+        InitialBalance: newWallet.balance,
+        WalletStatusId: newWallet.status,
+        ColorTypeId: newWallet.color,
+        CurrencyId: newWallet.currency
+      }
+      // API Call
+      const response = await axios.post(apiUrl, walletBody, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Check errors
+      if(response.data.succeeded === false || response === null || response.data === null) {
+          toast.error(response.data.message || 'خطأ في إنشاء محفظة مشتركة جديدة!');
+          return;
+      }
+      else {
+        toast.success(response.data.message);
+        setShowAddModal(false);
+        setAddedWallet((prev) => !prev);
+        return;
+      }
     }
-    ,{
-      id: 2,
-      name: "محفظتي 2",
-      type: "مشتركة",
-      in: "هذا الشهر+ 14.2%",
-      members: 7,
-      owner: "محمد المحلاوي",
-      creationDate: "2024-05-10",
-      currency: "جنيه مصري",
-      amount: 50000,
-      totalActivity: 14.2,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ]
-      ,
-      DataMembers:[
-        { id: 1, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 2, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 3, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-        { id: 4, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 5, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 6, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-      ]
-        
+    catch(err) {
+      console.log(err);
+      // set the unsuccessful message
+      if(err.status === 401) { // UnAuthorized
+        localStorage.clear();
+        // Call Logout Endpoint ...
+        navigate('/login');
+      }
+      else if(err.status === 400) {
+        let errs = err.response.data;
+        if(Array.isArray(errs.errors)) {
+          toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+        }
+      }
     }
-    ,{
-      id: 3,
-      name: "محفظتي 3" ,
-      type: "مشتركة",
-      in: "هذا الشهر+ 14.2%",
-      members: 7,
-      owner: "ايمن ياسين",
-      creationDate: "2024-05-10",
-      currency: "جنيه مصري",
-      amount: 22000,
-      totalActivity: 14.2,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ],
-      DataMembers:[
-        { id: 1, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 2, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 3, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-        { id: 4, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 5, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 6, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-      ]
-        
+    finally {
+      setSaveLoading(false);
     }
-    ,{
-      id: 4,
-      name: "محفظتي 4",
-      type: "مشتركة",
-      in: "هذا الشهر+ 14.2%",
-      members: 7,
-      owner: " فوزي الفرماوي",
-      creationDate: "2024-05-10",
-      currency: "جنيه مصري",
-      amount: 40000,
-      totalActivity: 14.2,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ]
-      ,
-      DataMembers:[
-        { id: 1, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 2, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 3, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-        { id: 4, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 5, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 6, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-      ]
-        
-    }
-    ,{
-      id: 5,
-      name: "محفظتي 5" ,
-      type: "مشتركة",
-      in: "هذا الشهر+ 14.2%",
-      members: 7,
-      owner: "محمد عادل",
-      creationDate: "2024-05-10",
-      currency: "جنيه مصري",
-      amount: 30000,
-      totalActivity: 14.2,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ],
-      DataMembers:[
-        { id: 1, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 2, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 3, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-        { id: 4, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 5, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 6, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-      ]
-        
-    }
+  };
+  
+  const handleEdit = async (updatedWallet) => {
+    try{
+      setEditLoading(true);
 
-    ,{
-      id: 6,
-      name: " 6محفظتي",
-      type: "مشتركة",
-      in: "هذا الشهر+ 14.2%",
-      members: 7,
-      owner: " بسنت",
-      creationDate: "2024-05-10",
-      currency: "جنيه مصري",
-      amount: 60000,
-      totalActivity: 14.2,
-      pieData: [
-        { name: "كاش", value: 4000 },
-        { name: "تحويلات", value: 5000 },
-        { name: "فيزا", value: 6000 }
-      ]
-      ,
-      DataMembers:[
-        { id: 1, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 2, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 3, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-        { id: 4, name: "محمد عبدالله", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ أسبوعين" },
-        { id: 5, name: "محمد محمود", email: "example@gmail.com", role: "مشاهد", joinDate: "2025-03-04", amountPaid: 1000, lastSeen: "منذ أسبوع" },
-        { id: 6, name: "عبدالله محمود", email: "example@gmail.com", role: "مشرف", joinDate: "2025-03-01", amountPaid: 2000, lastSeen: "منذ 40 يوم" },
-      ]
-        
+      const apiUrl = `${API_BASE_URL}/SharedWallets/Update/${updatedWallet.walletId}`;
+      
+      const walletBody = {
+        Name: updatedWallet.walletName,
+        Description: updatedWallet.notes,
+        InitialBalance: updatedWallet.balance,
+        WalletStatusId: updatedWallet.status,
+        ColorTypeId: updatedWallet.color,
+        CurrencyId: updatedWallet.currency
+      }
+      // API Call
+      const response = await axios.put(apiUrl, walletBody, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Check errors
+      if(response.data.succeeded === false || response === null) {
+          toast.error(response.data.message || 'خطأ في إنشاء محفظة جديدة!');
+          return;
+      }
+      else {
+        toast.success(response.data.message);
+        setShowEditModal(false);
+        setAddedWallet((prev) => !prev);
+        return;
+      }
     }
-           
-  ]);
-
-  const handleAddWallet = (newWallet) => {
-    setSharedWallets(prev => [
-      ...prev,
-      { id: prev.length + 1, in: "", ...newWallet }
-    ]);
+    catch(err) {
+      // set the unsuccessful message
+      if(err.status === 401) { // UnAuthorized
+        localStorage.clear();
+        // Call Logout Endpoint ...
+        navigate('/login');
+      }
+      else if(err.status === 400) {
+        let errs = err.response.data;
+        if(Array.isArray(errs.errors)) {
+          toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+        }
+      }
+    }
+    finally {
+      setEditLoading(false);
+    }
   };
 
+  const handleDelete = async (data) => {
+    try{
+      setDeleteLoading(true);
+
+      const apiUrl = `${API_BASE_URL}/SharedWallets/Delete/${data.walletId}`;
+      
+      // API Call
+      const response = await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Check errors
+      if(response.data.succeeded === false || response === null) {
+          toast.error(response.data.message || 'خطأ في إنشاء محفظة جديدة!');
+          return;
+      }
+      else {
+        toast.success(response.data.message);
+        setShowDeleteModal(false);
+        setAddedWallet((prev) => !prev);
+        return;
+      }
+    }
+    catch(err) {
+      // set the unsuccessful message
+      if(err.status === 401) { // UnAuthorized
+        localStorage.clear();
+        // Call Logout Endpoint ...
+        navigate('/login');
+      }
+      else if(err.status === 400) {
+        let errs = err.response.data;
+        if(Array.isArray(errs.errors)) {
+          toast.error(errs.errors.join(', ') || 'حدث خطأ ما');
+        }
+      }
+    }
+    finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const getWalletOwner = (wallet) => {
+    if(wallet.members && wallet.members.length > 0) {
+      const owner = wallet.members.find(member => member.role === 'مالك');
+      return owner ? owner.fullName : 'غير معروف';
+    }
+    return 'غير معروف';
+  }
+    
   return (
-    <div className="relative p-6 w-[1120px] h-[800px] flex-wrap text-right font-sans mx-auto">
-      {/* الهيدر */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-[20px] font-bold">المحافظ المشتركة</h2>
+    <div className="p-6 w-[1020px] h-auto text-right font-sans">
+      <div className="flex justify-between mt-6">
+        {/* العنوان + تصفية */}
+        <div className="justify-between items-center mb-6">
+          
+          <h2 className="text-[20px] font-bold">المحافظ المشتركة</h2>
+        </div>
         <Dropdown />
       </div>
-
-      {/* شبكة الكروت */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-12">
-        {sharedWallets.map((wallet) => (
-          <div
-            key={wallet.id}
-            className="bg-white shadow-md border border-gray-200 rounded-xl p-4 text-center flex flex-col justify-between w-[250px] h-auto"
-          >
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <div className=" text-right">
-                <h3 className="font-bold text-[18px]">{wallet.name}</h3>
-                <div className="bg-[rgba(121,202,50,0.1)] w-[73px] h-[19px] rounded-md inline-block px-2 py-1 mb-2">
-                <p className="text-[#79CA32] text-right text-[8px] whitespace-nowrap font-bold">{wallet.in}</p>
-              </div>
-                </div>
-                <img src={walletIcon} alt="wallet icon" className="w-8 h-8" />
-              </div>
-              
-              <div className="text-[12px] text-[#5c5c5c] space-y-1">
-                <div className="flex justify-between">
-                  <span className="font-medium">النوع</span>
-                  <span className="font-bold">{wallet.type}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">عدد المشتركين</span>
-                  <span className="font-bold">{wallet.members} مشتركين</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">المالك</span>
-                  <span className="font-bold">{wallet.owner}</span>
-                </div>
-              </div>
+    
+      {
+        loading ? (
+          <div className="flex justify-center items-start min-h-screen">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-maincolor mx-auto"></div>
+              {/* <p className="mt-2 text-maincolor">جاري التحميل ⌛</p> */}
             </div>
-            <button 
-           onClick={() => WalletShared(wallet)}
-            
-            className="mt-4 bg-[#16423C] text-white font-medium py-2 rounded-full hover:bg-white hover:text-[#16423C] hover:border hover:border-[#16423C] transition">
-              عرض التفاصيل
-            </button>
           </div>
-        ))}
+        ) : (
+        <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+          {
+          sharedWallets.length > 0 ? (
+          sharedWallets.map((wallet) => (
+            <div
+              key={wallet.id}
+              className="bg-white shadow-xl border-2 rounded-xl p-6 text-center"
+            >
+              <div className="text-green-700 text-4xl flex justify-center mb-2">
+                <img src={walletIcon} alt="" />
+              </div>
+              <h3 className="font-bold text-maincolor text-lg mb-2">{wallet.name}</h3>
+              <div className="flex-cols justify-center items-center text-right">
+                <p className="text-maincolor mb-1"><BadgeDollarSignIcon className="inline ml-3 size-5"/> <span className="text-secondcolor text-sm font-semibold">{wallet.totalBalance.toFixed(2)} {wallet.walletCurrency.name}</span></p>
+                <p className="text-maincolor mb-1"><Users2Icon className="inline ml-3 size-5"/> <span className="text-secondcolor text-sm font-semibold">{wallet.members.length}</span></p>
+                <p className="text-maincolor mb-1"><LucideLoaderPinwheel className="inline ml-3 size-5"/> <span className="text-secondcolor text-sm font-semibold">{getWalletOwner(wallet)}</span></p>
+                <p className="text-maincolor"><ActivityIcon className="inline ml-3 size-5"/> <span className={`${wallet.walletStatus.name == 'نشط' ? 'text-green-500 text-sm font-semibold' : 'text-red-600 text-sm font-semibold'}`}>{wallet.walletStatus.name}</span></p>
+              </div>
+              {/* <div className="text-[14px] text-gray-500 flex justify-center gap-5 px-4">
+                <span className={`${wallet.walletStatus.name == 'نشط' ? 'text-green-600' : 'text-red-600'}`}>{wallet.walletStatus.name}</span>
+              </div> */}
+              <div className="mt-6 flex justify-center gap-6">
+                <button 
+                  onClick={Walletdetails}
+                  className="">
+                  <Eye className="text-maincolor cursor-pointer hover:text-gray-500" />
+                </button>
+                
+                {
+                  wallet.isOwner ? (
+                    <>
+                      <button 
+                        onClick={() => { setShowEditModal(true); setWalletId(wallet.id); }}
+                        className="">
+                        <PenBoxIcon className="text-warning cursor-pointer hover:text-gray-500" />
+                      </button>
 
-        {/* كرت الإضافة */}
-        <div
-          onClick={() => setShowModal(true)}
-          className="h-[205px] w-[250px] bg-white shadow-md border-dashed border-2 border-gray-300 rounded-xl p-4 flex flex-col justify-center items-center cursor-pointer hover:bg-gray-50 transition"
-        >
-          <span className="text-4xl text-[#16423C] font-bold mb-2">+</span>
-          <span className="text-sm text-gray-500">إضافة بطاقة جديدة</span>
+                      <button 
+                        onClick={() => { setShowDeleteModal(true); setWalletId(wallet.id); }}
+                        className="">
+                        <Trash2Icon className="text-error cursor-pointer hover:text-gray-500" />
+                      </button>
+                    </>
+                  ) : ("")
+                }
+              </div>
+
+            </div>
+          ))) : (
+            <div className="flex justify-center items-center text-error">لا يوجد لديك محافظ شخصية حتي الآن</div>
+          )
+        }
+
+          {/* زر الإضافة */}
+          <div
+            onClick={() => setShowAddModal(true)}
+            className="bg-white shadow-xl border-dashed border-2 border-gray-300 w-[240px] h-[300px] rounded-xl p-6 flex flex-col justify-center items-center cursor-pointer hover:bg-gray-50 transition"
+          >
+            <span className="text-3xl text-[#16423C] font-bold">+</span>
+            <span className="mt-2 text-sm text-gray-500">إضافة</span>
+          </div>
         </div>
-      </div>
+        )
+      }
+      
 
       {/* مودال الإضافة */}
-      {showModal && (
-        <AddWalletModal
-          onClose={() => setShowModal(false)}
-          onSave={(data) => {
-            handleAddWallet(data);
-            setShowModal(false);
-          }}
+      {showAddModal && (
+        <AddSharedWalletModal
+          onClose={() => setShowAddModal(false)}
+          onSave={handleSave}
+          saveLoading={saveLoading}
+        />
+      )}
+
+      {/* مودال التعديل */}
+      {showEditModal && (
+        <EditSharedWalletModal
+          onClose={() => setShowEditModal(false)}
+          onEdit={handleEdit}
+          walletId={walletId}
+          token={token}
+          editLoading={editLoading}
+        />
+      )}
+
+      {/* مودال الحذف */}
+      {showDeleteModal && (
+        <DeleteSharedWalletModal
+          onClose={() => setShowDeleteModal(false)}
+          onDelete={handleDelete}
+          walletId={walletId}
+          deleteLoading={deleteLoading}
         />
       )}
     </div>

@@ -22,6 +22,7 @@ import AddNewBudget from './components/Pages/Budget/BudgetContent/AddNewBudget.j
 import Expenses from './components/Pages/Expenses/Expenses.jsx';
 import Income from './components/Pages/Income/Income.jsx';
 import BudgetWalletsPage from './components/Pages/Extensions/BudgetWalletsPage.jsx';
+import EditUserPage from './components/Pages/User/EditUserPage.jsx';
 
 function App() {
   useEffect(() => {
@@ -49,7 +50,10 @@ function App() {
           
           <Route path="/dashboard" element={<DashboardNew />} />
           <Route path="/wallets" element={<Wallet />} />
+
           <Route path="/profile" element={<Profileuser />} />
+          <Route path="/edit-user" element={<EditUserPage />} />
+          
           <Route path='/notification' element={<Notification />} />
           
           {/* Budgets */}

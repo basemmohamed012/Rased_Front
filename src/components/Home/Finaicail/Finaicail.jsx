@@ -18,7 +18,7 @@ const Financial = () => {
     <div className="text-center mb-20">
       <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 leading-relaxed">
         <span className="text-black dark:text-white slogan-font md:mb-10 text-4xl">
-          راقِبْ بِذَكاء، أَنْفِقْ بِحِكْمَة
+          راقب بذكاء، أنفق بحكمة
         </span>
       </h2>
     </div>
@@ -51,7 +51,7 @@ const Financial = () => {
         </p>
         <button
          className="bg-white w-[161px] h-[54px] text-green-900 font-semibold px-6 py-2 rounded-full hover:bg-green-100 mt-10 transition">
-          <div className="flex gap-x-10">
+          <div onClick={() => window.location.href = '/login'} className="flex gap-x-10">
             <p>تتبّع الآن</p>
             <img src={arrowbtn} alt="" />
           </div>

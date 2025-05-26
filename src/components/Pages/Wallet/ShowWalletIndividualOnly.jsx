@@ -1,5 +1,5 @@
 import React from 'react'
-import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet'
+import NavbarHeader from '../../../Layout/NavbarHeader/NavbarHeader'
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx'
 import WalletIdividual from '../../Pages/Wallet/WalletIndividual.jsx'
 import Footer from '../../Home/Footer/Footer'
@@ -11,7 +11,7 @@ const ShowWalletIndividualOnly = () => {
     <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
       {/* Navbar */}
       <div className="row-span-1 relative z-10">
-        <NavbarWallet />
+        <NavbarHeader />
       </div>
 
       {/* Main Content Area */}

@@ -17,10 +17,10 @@ export default function TabsWithTable() {
     <div className="relative min-h-[1849px] w-[1011px] rounded-xl overflow-hidden">
 
       {/* الخلفية */}
-      <img src={ss} alt="" className="absolute inset-0 object-cover z-0" />
+      <img src={ss} alt="" className="absolute inset-0 object-cover" />
 
       {/* الشريط العلوي */}
-      <div className="relative right-10 w-[1011px] inset-0 z-10 flex gap-28 items-center justify-around px-6 py-4">
+      <div className="relative right-10 w-[1011px] inset-0 flex gap-28 items-center justify-around px-6 py-4">
 
         {/* Dropdown */}
         <div className='relative left-5 top-14'>
@@ -50,7 +50,7 @@ export default function TabsWithTable() {
       </div>
 
       {/* محتوى كل تاب */}
-      <div className="relative top-28 right-10 z-10">
+      <div className="relative top-28 right-10">
         {activeTab === 'إجمالي الدخل' && (
          <div>
            <div className="flex gap-4">

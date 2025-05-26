@@ -116,9 +116,6 @@ export default function BudgetForm() {
       setLoading(true);
 
       const apiUrl = `${API_BASE_URL}/Budgets`;
-      
-      console.log(token);
-      console.log(form);  
       // API Call
       const response = await axios.post(apiUrl, form, {
         headers: {
@@ -126,8 +123,6 @@ export default function BudgetForm() {
         }
       });
       
-      console.log(response);
-
       // Check errors
       if(response.data.succeeded === false || response === null || response.data === null) {
           toast.error(response.data.message || 'خطأ في إنشاء محفظة جديدة!');
@@ -140,7 +135,6 @@ export default function BudgetForm() {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();
@@ -176,7 +170,7 @@ export default function BudgetForm() {
           </p> */}
         </div>
         <div className='flex justify-end items-center gap-6'>
-          <p className='text-maincolor text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
+          <p className='text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
           <p className='text-maincolor font-semibold'><span className='text-3xl'>💰</span> {currency}</p>
         </div>
       </div>

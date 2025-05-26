@@ -1,5 +1,5 @@
 import React from 'react';
-import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet';
+import NavbarHeader from '../../../Layout/NavbarHeader/NavbarHeader';
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
 import Buttonss from '../Dashboardd/DashContent/Buttonss.jsx'
 import Footer from '../../Home/Footer/Footer';
@@ -10,7 +10,7 @@ const Wallet = () => {
     <div className="grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-screen">
       {/* Navbar */}
       <div className="row-span-1 relative z-10">
-        <NavbarWallet />
+        <NavbarHeader />
       </div>
 
       {/* Main Content Area */}
@@ -21,7 +21,7 @@ const Wallet = () => {
         </div>
 
         {/* Page Content */}
-        <div className="p-6 absolute left-[70px] top-10 h-[770px] space-y-10">
+        <div className="p-6 absolute left-[70px] top-15 h-[770px] space-y-10">
          
          <Buttonss />
         

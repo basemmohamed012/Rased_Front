@@ -15,7 +15,7 @@ const Navbar = () => {
     { name: "الرئيسية", path: "/" },
     { name: "من نحن", path: "/about" },
     { name: "تواصل معنا", path: "/wallets" },
-    { name: "الحساب الشخصي", path: "/profile" },
+    // { name: "الحساب الشخصي", path: "/profile" },
   ];
 
   return (

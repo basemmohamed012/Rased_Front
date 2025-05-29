@@ -5,8 +5,6 @@ import ErrorBoundary from './Hooks/Boundary/ErrorBoundary.jsx';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
-import SidebarW from './Layout/SideBar/SidebarW.jsx';
-import  Wallet  from './components/Pages/Wallet/Wallet.jsx';
 import DashboardNew from './components/Pages/Dashboardd/DashboardNew.jsx'
 import LoginPage from './components/Pages/auth/LoginPage.jsx';
 import SignupPage from './components/Pages/auth/SignupPage.jsx';
@@ -25,6 +23,7 @@ import BudgetWalletsPage from './components/Pages/Extensions/BudgetWalletsPage.j
 import EditUserPage from './components/Pages/User/EditUserPage.jsx';
 import AddNewIncome from './components/Pages/Income/ContentIncome/AddNewIncome.jsx';
 import ShowSharedWalletDetailsSection from './components/Pages/ShareWalletDetails/ShowSharedWalletDetailsSection.jsx';
+import EditBudgetPage from './components/Pages/Budget/BudgetContent/EditBudgetPage.jsx';
 
 function App() {
   useEffect(() => {
@@ -67,6 +66,7 @@ function App() {
           <Route path='/budget' element={<Budget />} />
           <Route path='/budget-wallets' element={<BudgetWalletsPage />} />
           <Route path='/add-budget' element={<AddNewBudget />} />
+          <Route path='/edit-budget/:id' element={<EditBudgetPage />} />
 
           {/* Incomes */}
           <Route path='/income' element={<Income />} />

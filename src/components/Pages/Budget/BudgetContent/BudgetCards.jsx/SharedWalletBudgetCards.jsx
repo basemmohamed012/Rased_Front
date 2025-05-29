@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ACCOUNT_STATUS, API_BASE_URL } from "../../../../../constants/AppConstants.js";
-import { decryptToken } from '../../../../helpers/TokenHelper'
+import { decryptToken } from '../../../../helpers/TokenHelper.js'
 import { useNavigate } from "react-router-dom";
 
 import React, { useState, useEffect } from 'react';
@@ -8,7 +8,8 @@ import DeleteBudgetModal from "../DeleteBudgetModal.jsx";
 import { Eye, PenBoxIcon, Trash2Icon } from "lucide-react";
 import { toast } from "react-toastify";
 
-const HomeCard = () => {
+
+const SharedWalletBudgetCards = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ const HomeCard = () => {
           // setLoading(true);
           setWallets([]);
 
-          const apiUrl = `${API_BASE_URL}/Wallets/All`;
+          const apiUrl = `${API_BASE_URL}/SharedWallets/All`;
 
           // API Call
           const response = await axios.get(apiUrl, {
@@ -77,12 +78,6 @@ const HomeCard = () => {
       }
 
       fetchWallets();
-
-    // if (mockWallets.length > 0) {
-    //   setWalletId(mockWallets[0].id);
-    //   setBudgets(mockBudgets[mockWallets[0].id] || []);
-    //   setSelectedBudget(mockBudgets[mockWallets[0].id]?.[0] || null);
-    // }
   }, []);
 
   const handleWalletChange = async (e) => {
@@ -95,7 +90,7 @@ const HomeCard = () => {
       setLoading(true);
       setBudgets([]);
 
-      const apiUrl = `${API_BASE_URL}/Budgets/Wallets/${selectedWalletId}/Valid`;
+      const apiUrl = `${API_BASE_URL}/Budgets/Wallets/${selectedWalletId}/Valid?isShared=true`;
 
       // API Call
       const response = await axios.get(apiUrl, {
@@ -185,10 +180,31 @@ const HomeCard = () => {
     }
   }
 
+  const handleExpenseDate = (expData) => {
+    const date = new Date(expData);
+
+    // Extract the parts
+    const day = date.getDate();
+    const month = date.toLocaleString('ar-EG', { month: 'short' });
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const amPm = hours >= 12 ? 'مساءً' : 'صباحًا';
+
+    // Convert to 12-hour format
+    const formattedHours = hours % 12 || 12;
+
+    // Format the final string
+    return `${day} ${month} ${formattedHours}:${minutes} ${amPm}`;
+  } 
+
+  const handleUpdateBudget = (budgetId) => {
+    navigate(`/edit-budget/${budgetId}`);
+  }
+
   return (
     <div className='container flex-col gap-6 mt-4 max-w-4xl mx-auto p-4'>
       <div className='flex justify-between items-center mb-6'>
-        <h2 className='text-maincolor text-2xl font-bold'>ابحث باسم المحفظة الشخصية</h2>
+        <h2 className='text-maincolor text-2xl font-bold'>ابحث باسم المحفظة المشتركة</h2>
         <div className="w-64">
           <select
             name="walletId"
@@ -252,7 +268,7 @@ const HomeCard = () => {
                   <div className="flex justify-between mt-4">
                     {/* Edit/Delete */}
                   <button 
-                    // onClick={() => { setShowEditModal(true); setWalletId(wallet.id); }}
+                    onClick={() => handleUpdateBudget(budget.budgetId)}
                     className="">
                     <PenBoxIcon className="text-warning cursor-pointer hover:text-gray-500" />
                   </button>
@@ -321,13 +337,13 @@ const HomeCard = () => {
                       </button>
                     </div>
                     
-                    {/* {selectedBudget.transactions && selectedBudget.transactions.length > 0 ? (
+                    {selectedBudget.relatedExpenses && selectedBudget.relatedExpenses.length > 0 ? (
                       <div className="space-y-3">
-                        {selectedBudget.transactions.map((transaction, index) => (
+                        {selectedBudget.relatedExpenses.map((transaction, index) => (
                           <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                             <div className="flex flex-col">
-                              <span className="font-medium text-gray-800">{transaction.name}</span>
-                              <span className="text-gray-500 text-sm">{transaction.date}</span>
+                              <span className="font-medium text-gray-800">{transaction.title}</span>
+                              <span className="text-gray-500 text-sm">{handleExpenseDate(transaction.date)}</span>
                             </div>
                             <span className="text-red-600 font-semibold">-${transaction.amount}</span>
                           </div>
@@ -335,7 +351,7 @@ const HomeCard = () => {
                       </div>
                     ) : (
                       <p className="text-gray-500 text-center py-4">لا توجد عمليات مالية</p>
-                    )} */}
+                    )}
                   </div>
                 )}
               </div>
@@ -362,6 +378,6 @@ const HomeCard = () => {
       </>
     </div>
   );
-};
+}
 
-export default HomeCard;
+export default SharedWalletBudgetCards

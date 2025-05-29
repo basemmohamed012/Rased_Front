@@ -7,11 +7,12 @@ import StateMangeBudget from './BudgetContent/StateMangeBudget.jsx'
 import SimpleBarchart from './BudgetContent/SimpleBarchart.jsx'
 import PieCharts from './BudgetContent/Piecharts.jsx'
 import Category from './BudgetContent/Category.jsx'
-import HomeCard from './BudgetContent/BudgetCards.jsx/HomeCard.jsx';
+import WalletBudgetCards from './BudgetContent/BudgetCards.jsx/WalletBudgetCards.jsx';
 import NotificationsList from '../User/contentUserPage/NotificationsList.jsx';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Spinner } from '../../helpers/Spinner.jsx';
+import SharedWalletBudgetCards from './BudgetContent/BudgetCards.jsx/SharedWalletBudgetCards.jsx';
 
 
 const Budget = () => {
@@ -58,8 +59,9 @@ const Budget = () => {
               <PieCharts />
             </div>
             {/* <Category /> */}
-            <div className='flex gap-6 w-[1020px] '>
-              <HomeCard />
+            <div className='flex-cols gap-8 w-[1020px] '>
+              <WalletBudgetCards />
+              <SharedWalletBudgetCards />
             </div>
             {/* <NotificationsList /> */}
               </div>

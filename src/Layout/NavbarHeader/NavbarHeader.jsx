@@ -21,15 +21,15 @@ const NavbarHeader = () => {
     // check if the account is active
     if(localStorage.getItem('acc-stat') !== ACCOUNT_STATUS.ACTIVE) {
       // Call the Logout from Backend ..
-      // localStorage.clear();
-      // navigate('/login');
+      localStorage.clear();
+      navigate('/login');
     }
     // Get the token
     const accessToken = localStorage.getItem('acc-token');
     let originalAcessToken = '';
     if(!accessToken) {
-        // navigate('/login');
-        // return;
+        navigate('/login');
+        return;
     }
     else {
         // decrypt the access token

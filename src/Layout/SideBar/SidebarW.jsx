@@ -23,6 +23,10 @@ const SidebarWallet = () => {
     navigate('/budget');
   }
 
+  const handleIncomeWallets = () => {
+    navigate('/income');
+  }
+
   const handleProfileClick = () => {
     navigate('/dashboard');
   };
@@ -163,8 +167,14 @@ const SidebarWallet = () => {
 
 <div className="flex items-center gap-2 mt-4 mr-4">
   <div onClick={handleBudgetWallets} className="flex gap-2 cursor-pointer">
-    <img src={nazra} alt="ميزانية" />
+    <img src={sharewa} alt="ميزانية" />
     <span className="font-bold text-[14px]">الميزانيـــــات</span>
+  </div>
+</div>
+<div className="flex items-center gap-2 mt-4 mr-4">
+  <div onClick={handleIncomeWallets} className="flex gap-2 cursor-pointer">
+    <img src={penwa} alt="دخل" />
+    <span className="font-bold text-[14px]">الدخـــــــــل</span>
   </div>
 </div>
 

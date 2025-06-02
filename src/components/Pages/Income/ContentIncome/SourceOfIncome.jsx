@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const SourceOfIncome = () => {
   const navigate =useNavigate();
   const  AddIncome =() =>{
-  navigate('/add-income')
+    navigate('/budget-wallets', { state: { from: 'income' } });
   }
   return (
    

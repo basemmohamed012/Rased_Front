@@ -7,8 +7,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { decryptToken } from '../../helpers/TokenHelper'
 import walletIcon from "../../../assets/images/share.svg";
+import { useLocation } from 'react-router-dom';
+
 
 const BudgetWallets = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   // Loadings
   const [loading, setLoading] = useState(true);
@@ -114,7 +117,11 @@ const BudgetWallets = () => {
     localStorage.setItem('sharedWalletId', sharedWalletId);
     localStorage.setItem('walletName', name);
     localStorage.setItem('walletCurrency', currency);
-    navigate('/add-budget');
+
+    if(location.state && location.state.from === 'budget')
+      navigate('/add-budget');
+    else
+      navigate('/add-income');
   }
   
   return (
@@ -122,8 +129,13 @@ const BudgetWallets = () => {
       <div className="flex justify-between mt-6">
         {/* العنوان + تصفية */}
         <div className="justify-between items-center mb-6">
-          
-          <h2 className="text-[20px] font-bold text-maincolor">اختر المحفظة المناسبة لإنشاء ميزانية جديدة</h2>
+          {
+            location.state && location.state.from === 'budget' ? ( 
+                <h2 className="text-[20px] font-bold text-maincolor">اختر المحفظة المناسبة لإنشاء ميزانيــة جديدة</h2>
+             ) : (
+                <h2 className="text-[20px] font-bold text-maincolor">اختر المحفظة المناسبة لإنشاء دخــل جديدة</h2>
+            )
+          }
         </div>
         {/* <Dropdown /> */}
       </div>

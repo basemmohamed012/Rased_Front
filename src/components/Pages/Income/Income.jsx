@@ -4,11 +4,12 @@ import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
 import Footer from '../../Home/Footer/Footer';
 import IncomeOverview from './ContentIncome/IncomeOverview.jsx';
 import Barchart from './ContentIncome/Barchart.jsx';
-import SourceOfIncome from './ContentIncome/SourceOfIncome.jsx';
 import SmartAnalysis from './ContentIncome/SmartAnalysis.jsx';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Spinner } from '../../helpers/Spinner.jsx';
+import WalletIncomeCards from './ContentIncome/WalletIncomeCards.jsx';
+import SharedWalletIncomeCards from './ContentIncome/SharedWalletIncomeCards.jsx';
 
 const Budget = () => {
 
@@ -44,14 +45,14 @@ const Budget = () => {
               {/* Sidebar */}
               <div className="h-[2130px]">
                 <SidebarW />
-              
               </div>
 
               {/* Page Content */}
-              <div className="p-6 absolute left-[70px] top-20  space-y-10">
-            <IncomeOverview />
+            <div className="p-6 absolute left-[70px] top-20  space-y-10">
+              <IncomeOverview />
               <Barchart />
-              <SourceOfIncome />
+              <WalletIncomeCards />
+              <SharedWalletIncomeCards />
               <SmartAnalysis />
               </div>
             </div>

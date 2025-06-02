@@ -4,7 +4,7 @@ import Date from './Date.jsx'
 const ManageExpenses = () => {
   const navigate = useNavigate();
  const handleClick = () => {
-  navigate('/addExpenses');
+  navigate('/add-expense');
 }
 
   return (

@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react';
 import NavbarHeader from '../../../../Layout/NavbarHeader/NavbarHeader';
 import SidebarW from '../../../../Layout/SideBar/SidebarW.jsx';
 import Footer from '../../../Home/Footer/Footer.jsx';
-import IncomeForm from './IncomeForm';
 import { Spinner } from '../../../helpers/Spinner.jsx';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import EditIncome from './EditIncome.jsx';
 
-const AddNewIncome = () => {
-  const [loading, setLoading] = useState(true);
+
+const EditIncomePage = () => {
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -35,7 +36,7 @@ const AddNewIncome = () => {
 
               {/* Page Content */}
               <div className="p-6 absolute left-[70px] space-y-10">
-                <IncomeForm />
+                <EditIncome />
               </div>
             </div>
 
@@ -62,6 +63,6 @@ const AddNewIncome = () => {
     
     </>
   );
-};
+}
 
-export default AddNewIncome;
+export default EditIncomePage

@@ -21,9 +21,9 @@ const MangeBudget = () => {
         <div>
             <button
             onClick={handleClick}
-            className='w-[180px] h-[44px] bg-[#16423C]  gap-[10px] rounded-[10px] pt-[10px] pr-[32px] pb-[10px] pl-[32px]' 
+            className='bg-maincolor rounded-md px-6 py-2 hover:bg-secondcolor transition-colors duration-300' 
             >
-               <p className='text-white text-[16px] font-bold'>
+               <p className='text-white text-md font-semibold'>
                  + إضافة ميزانية
                </p>
             </button>

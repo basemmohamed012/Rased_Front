@@ -174,7 +174,7 @@ const SidebarWallet = () => {
 <div className="flex items-center gap-2 mt-4 mr-4">
   <div onClick={handleIncomeWallets} className="flex gap-2 cursor-pointer">
     <img src={penwa} alt="دخل" />
-    <span className="font-bold text-[14px]">الدخـــــــــل</span>
+    <span className="font-bold text-[14px]">مصــــادر الدخـــــــــل</span>
   </div>
 </div>
 

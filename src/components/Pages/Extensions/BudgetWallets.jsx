@@ -133,7 +133,7 @@ const BudgetWallets = () => {
             location.state && location.state.from === 'budget' ? ( 
                 <h2 className="text-[20px] font-bold text-maincolor">اختر المحفظة المناسبة لإنشاء ميزانيــة جديدة</h2>
              ) : (
-                <h2 className="text-[20px] font-bold text-maincolor">اختر المحفظة المناسبة لإنشاء دخــل جديدة</h2>
+                <h2 className="text-[20px] font-bold text-maincolor">اختر المحفظة المناسبة لإنشاء مصدر دخــل جديد</h2>
             )
           }
         </div>

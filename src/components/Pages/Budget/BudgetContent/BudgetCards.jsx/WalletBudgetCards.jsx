@@ -77,12 +77,6 @@ const WalletBudgetCards = () => {
       }
 
       fetchWallets();
-
-    // if (mockWallets.length > 0) {
-    //   setWalletId(mockWallets[0].id);
-    //   setBudgets(mockBudgets[mockWallets[0].id] || []);
-    //   setSelectedBudget(mockBudgets[mockWallets[0].id]?.[0] || null);
-    // }
   }, []);
 
   const handleWalletChange = async (e) => {

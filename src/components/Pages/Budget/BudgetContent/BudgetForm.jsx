@@ -161,6 +161,10 @@ export default function BudgetForm() {
   };
 
   const handleCancel = () => {
+    localStorage.removeItem('walletId');
+    localStorage.removeItem('sharedWalletId');
+    localStorage.removeItem('walletCurrency');
+    localStorage.removeItem('walletName');
     navigate('/budget');
   }
 

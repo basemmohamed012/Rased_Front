@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ACCOUNT_STATUS, API_BASE_URL } from "../../../../constants/AppConstants.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { decryptToken } from '../../../helpers/TokenHelper'
 
-const IncomeForm = () => {
+
+const EditIncome = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [walletName, setWalletName] = useState('');
-  // const [walletId, setWalletId] = useState('');
-  const [currency, setCurrency] = useState('');
   const [categories, setCategories] = useState([]);
   const [token, setToken] = useState('');
   const [form, setForm] = useState({
@@ -20,60 +19,82 @@ const IncomeForm = () => {
     Title: '',
     Description: '',
     Amount: '',
-    IncomeSourceTypeId: '',
-    IncomeTemplateId: 0,
-    CreatedDate: new Date()
+    IncomeSourceTypeId: ''
   });
 
 
   useEffect(() => {
-      // check if the account is active
-      if(localStorage.getItem('acc-stat') !== ACCOUNT_STATUS.ACTIVE) {
+        // check if the account is active
+        if(localStorage.getItem('acc-stat') !== ACCOUNT_STATUS.ACTIVE) {
         // Call the Logout from Backend ..
         localStorage.clear();
         navigate('/login');
-      }
-      // Get the token
-      const accessToken = localStorage.getItem('acc-token');
-      let originalAcessToken = '';
-      if(!accessToken) {
-          navigate('/login');
-          return;
-      }
-      else {
-          // decrypt the access token
-          originalAcessToken = decryptToken(accessToken);
-          setToken(originalAcessToken);
-          
-          // Get the required data
-          setWalletName(localStorage.getItem('walletName'));
-          form.WalletId = localStorage.getItem('walletId') === "null" ? null : localStorage.getItem('walletId');
-          form.SharedWalletId = localStorage.getItem('sharedWalletId') === "null" ? null : localStorage.getItem('sharedWalletId');
-          setCurrency(localStorage.getItem('walletCurrency'));
-      }
+        }
+        // Get the token
+        const accessToken = localStorage.getItem('acc-token');
+        let originalAcessToken = '';
+        if(!accessToken) {
+            navigate('/login');
+            return;
+        }
+        else {
+            // decrypt the access token
+            originalAcessToken = decryptToken(accessToken);
+            setToken(originalAcessToken);
+        }
 
-      // Fetch Categories Data
-      const fetchCategories = async () => {
+        // Fetch Categories Data
+        const fetchCategories = async () => {
         // Fetching the data
         try {
-          const apiUrl = `${API_BASE_URL}/IncomeSourceType`;
+            const apiUrl = `${API_BASE_URL}/IncomeSourceType`;
 
-          // API Call
-          const response = await axios.get(apiUrl);
+            // API Call
+            const response = await axios.get(apiUrl);
 
-          console.log(response);
-          
-          // Check errors
-          if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
-              setCategories(response.data.data);
-          }
+            console.log(response);
+            
+            // Check errors
+            if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
+                setCategories(response.data.data);
+            }
         } catch (err) {
             if(err.response && err.response.data.errors.length > 0)
-              toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
+                toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
         }
-      }
+        }
+        fetchCategories();
 
-      fetchCategories();
+            // Fetch Budget Data
+        const fetchIncomeData = async () => {
+            try {
+            const apiUrl = `${API_BASE_URL}/incomes/${id}`;
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${originalAcessToken}`
+                }
+            });
+
+            // Check if the response is valid
+            if(response.data.succeeded === true && response.data.data) {
+                const incomeData = response.data.data;
+                setForm({
+                    WalletId: incomeData.walletId,
+                    SharedWalletId: incomeData.sharedWalletId,
+                    Title: incomeData.title,
+                    Description: incomeData.description,
+                    Amount: incomeData.amount,
+                    IncomeSourceTypeId: incomeData.incomeSourceTypeId
+                });
+            }
+            }
+            catch (err) {
+                if(err.response && err.response.data.errors.length > 0)
+                    toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
+            }
+        }
+
+        fetchIncomeData();
     }, []);
 
     // Handle Form Changes
@@ -98,9 +119,9 @@ const IncomeForm = () => {
     try{
       setLoading(true);
 
-      const apiUrl = `${API_BASE_URL}/incomes`;
+      const apiUrl = `${API_BASE_URL}/incomes/${id}`;
       // API Call
-      const response = await axios.post(apiUrl, form, {
+      const response = await axios.put(apiUrl, form, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -108,15 +129,11 @@ const IncomeForm = () => {
       
       // Check errors
       if(response.data.succeeded === false || response === null || response.data === null) {
-          toast.error(response.data.message || 'خطأ في إنشاء مصدر دخل جديد!');
+          toast.error(response.data.message || 'خطأ في تحديث بيانات مصدر دخل!');
           return;
       }
       else {
-        localStorage.removeItem('walletId');
-        localStorage.removeItem('sharedWalletId');
-        localStorage.removeItem('walletCurrency');
-        localStorage.removeItem('walletName');
-        localStorage.setItem('message', 'تم إنشاء مصدر الدخل بنجاح');
+        localStorage.setItem('message', response.data.message || 'تم تعديل مصدر الدخل بنجاح');
         navigate('/income');
       }
     }
@@ -155,15 +172,12 @@ const IncomeForm = () => {
     <div className='container mt-6'>
       <div className='flex justify-between items-center'>
         <div className='flex-col gap-2 justify-start'>
-          <h2 className="text-[20px] font-bold text-maincolor  mb-2 ">إنشاء مصدر دخل جديد</h2>
-          {/* <p className='text-thirdcolor text-[14px] font-semibold ' >
-            املأ البيانات التالية لإضافة ميزانية جديدة إلي حسابك
-          </p> */}
+          <h2 className="text-[20px] font-bold text-maincolor  mb-2 ">تحديث مصدر دخل</h2>
         </div>
-        <div className='flex justify-end items-center gap-6'>
+        {/* <div className='flex justify-end items-center gap-6'>
           <p className='text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
           <p className='text-maincolor font-semibold'><span className='text-3xl'>💰</span> {currency}</p>
-        </div>
+        </div> */}
       </div>
     <div className="w-[1020px] h-auto mx-auto bg-white p-8 rounded-lg shadow mt-8">
       
@@ -215,9 +229,15 @@ const IncomeForm = () => {
             >
               <option value="">اختـــــــر</option>
               {categories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
+                category.id == form.IncomeSourceTypeId ? (
+                  <option key={category.id} value={category.id} selected>
+                    {category.name}
+                  </option>
+                ) : (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                )
               ))}
             </select>
           </div>
@@ -247,6 +267,6 @@ const IncomeForm = () => {
     </div>
     </div>
   );
-};
+}
 
-export default IncomeForm;
+export default EditIncome

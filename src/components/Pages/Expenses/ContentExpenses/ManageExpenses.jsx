@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import Date from './Date.jsx'
 const ManageExpenses = () => {
   const navigate = useNavigate();
+  
  const handleClick = () => {
-  navigate('/add-expense');
+  navigate('/budget-wallets', { state: { from: 'expense' } });
 }
 
   return (

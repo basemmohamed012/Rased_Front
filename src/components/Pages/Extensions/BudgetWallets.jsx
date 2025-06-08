@@ -120,8 +120,10 @@ const BudgetWallets = () => {
 
     if(location.state && location.state.from === 'budget')
       navigate('/add-budget');
-    else
+    else if(location.state && location.state.from === 'income')
       navigate('/add-income');
+    else
+      navigate('/add-expense');
   }
   
   return (

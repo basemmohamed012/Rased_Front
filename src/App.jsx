@@ -24,6 +24,8 @@ import EditUserPage from './components/Pages/User/EditUserPage.jsx';
 import AddNewIncome from './components/Pages/Income/ContentIncome/AddNewIncome.jsx';
 import ShowSharedWalletDetailsSection from './components/Pages/ShareWalletDetails/ShowSharedWalletDetailsSection.jsx';
 import EditBudgetPage from './components/Pages/Budget/BudgetContent/EditBudgetPage.jsx';
+import EditIncomePage from './components/Pages/Income/ContentIncome/EditIncomePage.jsx';
+import AddExpenses from './components/Pages/Expenses/ContentExpenses/AddExpenses.jsx';
 
 function App() {
   useEffect(() => {
@@ -71,9 +73,11 @@ function App() {
           {/* Incomes */}
           <Route path='/income' element={<Income />} />
           <Route path='/add-income' element={<AddNewIncome />} />
+          <Route path='/edit-income/:id' element={<EditIncomePage />} />
           
           {/* Expenses */}
           <Route path='/expenses' element={<Expenses />} />
+          <Route path='/add-expense' element={<AddExpenses />} />
 
           {/* <Route path="/wallets" element={<Wallet />} /> */}          
           <Route path='/notification' element={<Notification />} />

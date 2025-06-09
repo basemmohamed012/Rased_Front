@@ -1,21 +1,21 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import NavbarHeader from '../../../../Layout/NavbarHeader/NavbarHeader';
 import SidebarW from '../../../../Layout/SideBar/SidebarW.jsx';
-import { useState, useEffect } from 'react';
-import AddExpensesForm from './AddxpensesForm.jsx'
 import Footer from '../../../Home/Footer/Footer.jsx';
 import { Spinner } from '../../../helpers/Spinner.jsx';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import EditIncome from './EditIncome.jsx';
 
-const AddExpenses = () => {
-  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }, []);
+const EditIncomePage = () => {
+  const [loading, setLoading] = React.useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   return (
     <>
@@ -35,8 +35,8 @@ const AddExpenses = () => {
               </div>
 
               {/* Page Content */}
-              <div className="p-6 absolute left-[70px]  top-20  space-y-10">
-                <AddExpensesForm />
+              <div className="p-6 absolute left-[70px] space-y-10">
+                <EditIncome />
               </div>
             </div>
 
@@ -60,8 +60,9 @@ const AddExpenses = () => {
           </div>
         )
       }
+    
     </>
   );
-};
+}
 
-export default AddExpenses;
+export default EditIncomePage

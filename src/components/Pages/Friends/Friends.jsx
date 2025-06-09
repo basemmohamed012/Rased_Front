@@ -2,7 +2,7 @@ import React from 'react'
 
 import NavbarWallet from '../../../Layout/NavbarWallet/NavbarWallet';
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
-import Footer from '../../Home/Footer/Footer';
+import Footer from '../../Home/Footer/Footer.jsx';
 import MangeFriends from './FriendsContent/MangeFriends.jsx'
 import FreindsPage from './FriendsContent/FreindsPage.jsx'
 import FriendSuggestions from './FriendsContent/FriendSuggestions.jsx';

@@ -1,17 +1,14 @@
-import exportImg from '../../../../assets/images/export.svg'
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ACCOUNT_STATUS, API_BASE_URL } from "../../../../constants/AppConstants.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { decryptToken } from '../../../helpers/TokenHelper'
 
-export default function ExpenseForm() {
+const EditExpense = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [walletName, setWalletName] = useState('');
-  // const [walletId, setWalletId] = useState('');
-  const [currency, setCurrency] = useState('');
   const [categories, setCategories] = useState([]);
   const [payments, setPayments] = useState([]);
   const [budgets, setBudgets] = useState([]);
@@ -27,8 +24,7 @@ export default function ExpenseForm() {
     CategoryName: '',
     SubCategoryId: '',
     PaymentMethodId: null,
-    RelatedBudgetId: null,
-    Attachment: null
+    RelatedBudgetId: null
   });
 
   // Get the Wallets from backend
@@ -42,8 +38,6 @@ export default function ExpenseForm() {
       // Get the token
       const accessToken = localStorage.getItem('acc-token');
       let originalAcessToken = '';
-      let wId = null;
-      let swId = null;
       if(!accessToken) {
           navigate('/login');
           return;
@@ -52,19 +46,6 @@ export default function ExpenseForm() {
           // decrypt the access token
           originalAcessToken = decryptToken(accessToken);
           setToken(originalAcessToken);
-          
-          // Get the required data
-          setWalletName(localStorage.getItem('walletName'));
-
-          if(localStorage.getItem('walletId') !== "null") {
-            form.WalletId = localStorage.getItem('walletId');
-            wId = localStorage.getItem('walletId');
-          }
-          if(localStorage.getItem('sharedWalletId') !== "null") {
-            form.SharedWalletId = localStorage.getItem('sharedWalletId');
-            swId = localStorage.getItem('sharedWalletId');
-          }
-          setCurrency(localStorage.getItem('walletCurrency'));
       }
 
       // Fetch Categories Data
@@ -87,7 +68,7 @@ export default function ExpenseForm() {
       }
       fetchCategories();
 
-      // Fetch Categories Data
+      // Fetch Payment Methods Data
       const fetchPayments = async () => {
         // Fetching the data
         try {
@@ -107,8 +88,8 @@ export default function ExpenseForm() {
       }
       fetchPayments();
 
-      // Fetch Categories Data
-      const fetchBudgets = async () => {
+      // Fetch Budget Data
+    const fetchBudgets = async (wId, swId) => {
         // Fetching the data
         try {
           let apiUrl = '';
@@ -117,6 +98,8 @@ export default function ExpenseForm() {
           if(swId !== null)
             apiUrl = `${API_BASE_URL}/budgets/wallets/${swId}/valid?isShared=true`;
           
+          console.log(apiUrl);
+
           // API Call
           const response = await axios.get(apiUrl, {
             headers: {
@@ -133,7 +116,42 @@ export default function ExpenseForm() {
               toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
         }
       }
-      fetchBudgets();
+
+      // Fetch Expense Data
+      const fetchExpenseData = async () => {
+        try {
+        const apiUrl = `${API_BASE_URL}/expenses/${id}`;
+        const response = await axios.get(apiUrl, {
+            headers: {
+            Authorization: `Bearer ${originalAcessToken}`
+            }
+        });
+
+        // Check if the response is valid
+        if(response.data.succeeded === true && response.data.data) {
+            const expenseData = response.data.data;
+            console.log(expenseData);
+
+            form.WalletId = expenseData.walletId;
+            form.SharedWalletId = expenseData.sharedWalletId;
+            form.Title = expenseData.title;
+            form.Date = expenseData.date.split('T')[0];
+            form.CategoryName = expenseData.categoryName;
+            form.SubCategoryId = expenseData.subCategoryId;
+            form.Amount = expenseData.amount;
+            form.Description = expenseData.description;
+            form.PaymentMethodId = expenseData.paymentMethodId;
+            form.RelatedBudgetId = expenseData.relatedBudgetId;
+
+            fetchBudgets(expenseData.walletId, expenseData.sharedWalletId);
+        }
+        }
+        catch (err) {
+            if(err.response && err.response.data.errors.length > 0)
+                toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
+        }
+        }
+    fetchExpenseData();
     }, []);
   
   // Update subcategories when category changes
@@ -148,9 +166,6 @@ export default function ExpenseForm() {
       } else {
         setFilteredSubcategories([]);
       }
-      
-      // Reset subcategory selection when category changes
-      setForm(prev => ({ ...prev, SubCategoryId: "" }));
     } else {
       setFilteredSubcategories([]);
     }
@@ -158,31 +173,13 @@ export default function ExpenseForm() {
 
   // Enhanced handleChange function to handle file uploads
   const handleChange = (e) => {
-      const { name, value, files } = e.target;
-      
-      if (name === 'Attachment' && files && files[0]) {
-          const file = files[0];
-          // Optional: Add file size validation (5MB = 5 * 1024 * 1024 bytes)
-          if (file.size > 5 * 1024 * 1024) {
-              alert('حجم الملف يجب أن يكون أقل من 5 ميغابايت');
-              return;
-          }
-          setForm(prev => ({ ...prev, [name]: file }));
-      } else {
-          setForm(prev => ({ ...prev, [name]: value }));
-      }
+    const { name, value } = e.target;
+    setForm({
+    ...form,
+    [name]: value,
+    });
 
-      console.log(form);
-  };
-
-  // Function to remove the uploaded file
-  const removeFile = () => {
-      setForm(prev => ({ ...prev, Attachment: null }));
-      // Reset the file input
-      const fileInput = document.getElementById('fileUpload');
-      if (fileInput) {
-          fileInput.value = '';
-      }
+    console.log(form);
   };
 
   const handleSubmit = async (e) => {
@@ -197,19 +194,18 @@ export default function ExpenseForm() {
     try{
       setLoading(true);
 
-      const apiUrl = `${API_BASE_URL}/expenses`;
+      const apiUrl = `${API_BASE_URL}/expenses/${id}`;
       console.log(form);
       // API Call
-      const response = await axios.post(apiUrl, form, {
+      const response = await axios.put(apiUrl, form, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+          Authorization: `Bearer ${token}`
         }
       });
       
       // Check errors
       if(response.data.succeeded === false || response === null || response.data === null) {
-          toast.error(response.data.message || 'خطأ في إنشاء مصروف جديدة!');
+          toast.error(response.data.message || 'خطأ في تحديث بيانات المصروف!');
           return;
       }
       else {
@@ -217,7 +213,7 @@ export default function ExpenseForm() {
         localStorage.removeItem('sharedWalletId');
         localStorage.removeItem('walletCurrency');
         localStorage.removeItem('walletName');
-        localStorage.setItem('message', 'تم إنشاء مصروف جديد بنجاح');
+        localStorage.setItem('message', 'تم تحديث بيانات المصروف بنجاح');
         navigate('/expenses');
       }
     }
@@ -256,11 +252,7 @@ export default function ExpenseForm() {
     <div>
       <div className='flex justify-between items-center'>
         <div className='flex-col gap-2 justify-start'>
-          <h2 className="text-[20px] font-bold text-maincolor  mb-2 ">إنشاء مصروف جديد</h2>
-        </div>
-        <div className='flex justify-end items-center gap-6'>
-          <p className='text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
-          <p className='text-maincolor font-semibold'><span className='text-3xl'>💰</span> {currency}</p>
+          <h2 className="text-[20px] font-bold text-maincolor  mb-2 ">تحديث بيانات مصروف</h2>
         </div>
       </div>
       <div className="w-[1020px] h-auto mx-auto bg-white p-8 rounded-lg shadow mt-8">
@@ -313,9 +305,15 @@ export default function ExpenseForm() {
               >
                 <option value="">اختر طريقة الدفع المناسبة</option>
                 {payments.map(payment => (
+                  form.PaymentMethodId == payment.id ? (
+                  <option key={payment.id} value={payment.id} selected>
+                    {payment.name}
+                  </option>
+                ) : (
                   <option key={payment.id} value={payment.id}>
                     {payment.name}
                   </option>
+                )
                 ))}
               </select>
             </div>
@@ -342,9 +340,15 @@ export default function ExpenseForm() {
             >
               <option value="">اختـــــــر</option>
               {categories.map(category => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
-                </option>
+                form.CategoryName == category.name ? (
+                  <option key={category.id} value={category.name} selected>
+                    {category.name}
+                  </option>
+                ) : (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                )
               ))}
             </select>
           </div>
@@ -360,9 +364,15 @@ export default function ExpenseForm() {
             >
               <option value="">اختـــــــر</option>
               {filteredSubcategories.map(subcategory => (
-                <option key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name}
-                </option>
+                form.SubCategoryId == subcategory.id ? (
+                  <option key={subcategory.id} value={subcategory.id} selected>
+                    {subcategory.name}
+                  </option>
+                ) : (
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {subcategory.name}
+                  </option>
+                )
               ))}
             </select>
           </div>
@@ -379,63 +389,19 @@ export default function ExpenseForm() {
               >
                 <option value="">اختر ميزانية مناسبة</option>
                 {budgets.map(budget => (
-                  <option key={budget.budgetId} value={budget.budgetId}>
+                  form.RelatedBudgetId == budget.budgetId ? (
+                  <option key={budget.budgetId} value={budget.budgetId} selected>
                     {budget.name}
                   </option>
+                    ) : (
+                    <option key={budget.budgetId} value={budget.budgetId}>
+                        {budget.name}
+                    </option>
+                    )
                 ))}
               </select>
             </div>
           </div>
-
-          <div>
-            <label className="block mb-1 font-bold text-right">فاتورة / ملف إضافي</label>
-            <div className="border-dashed border-2 border-[#A9A6A6] p-10 text-center rounded-lg relative">
-                {!form.Attachment ? (
-                    // Show upload area when no file is selected
-                    <>
-                        <input
-                            type="file"
-                            name="Attachment"
-                            className="hidden"
-                            id="fileUpload"
-                            onChange={handleChange}
-                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
-                        />
-                        <label htmlFor="fileUpload" className="cursor-pointer text-[#16423C] font-bold">
-                            <img
-                                className='mx-auto mb-4'
-                                src={exportImg} 
-                                alt="" 
-                            />
-                        </label>
-                        <p className="text-sm text-gray-500 mt-2">
-                            (إضافة ملفات لا تتجاوز 5 ميغابايت على الأكثر)
-                        </p>
-                    </>
-                ) : (
-                    // Show file info when file is selected
-                    <div className="flex items-center justify-center space-x-4 rtl:space-x-reverse">
-                        <div className="text-center">
-                            <div className="text-green-600 text-lg mb-2">✓</div>
-                            <p className="text-[#16423C] font-bold text-sm">
-                                {form.Attachment.name}
-                            </p>
-                            <p className="text-gray-500 text-xs">
-                                {(form.Attachment.size / 1024 / 1024).toFixed(2)} ميغابايت
-                            </p>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={removeFile}
-                            className="bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold transition-colors"
-                            title="إزالة الملف"
-                        >
-                            ×
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
 
           <div className="flex justify-start gap-8 mt-10">
             <button
@@ -459,3 +425,5 @@ export default function ExpenseForm() {
     </div>
   );
 }
+
+export default EditExpense

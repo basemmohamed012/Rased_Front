@@ -7,6 +7,7 @@ import sharewa from '../../assets/images/sharewa.svg';
 import arowwhite from '../../assets/images/arrowwhite.svg';
 import wallet1 from '../../assets/images/wallet1.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Target, Rocket, StarsIcon, DollarSignIcon } from 'lucide-react';
 
 
 const SidebarWallet = () => {
@@ -43,9 +44,10 @@ const SidebarWallet = () => {
     navigate('/shared-wallets');
   };
 
-  const Wallets = () => {
-    navigate('/wallets');
-  };
+  const handleAIExpenses = () => {
+    navigate('/expense-cv');
+  }
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -171,20 +173,39 @@ const SidebarWallet = () => {
 
       <div className="flex items-center gap-2 mt-4 mr-4">
         <div onClick={handleBudgetWallets} className="flex gap-2 cursor-pointer">
-          <img src={sharewa} alt="ميزانية" />
+          <Target size={18} className='text-yellow-300' />
           <span className="font-bold text-[14px]">الميزانيـــــات</span>
         </div>
       </div>
       <div className="flex items-center gap-2 mt-4 mr-4">
         <div onClick={handleIncomeWallets} className="flex gap-2 cursor-pointer">
-          <img src={penwa} alt="دخل" />
+          <Rocket size={18} className='text-yellow-300' />
           <span className="font-bold text-[14px]">مصــــادر الدخـــــــــل</span>
         </div>
       </div>
       <div className="flex items-center gap-2 mt-4 mr-4">
         <div onClick={handleExpenses} className="flex gap-2 cursor-pointer">
-          <img src={penwa} alt="دخل" />
+          <DollarSignIcon size={18} className='text-yellow-300' />
           <span className="font-bold text-[14px]">المصروفــــــات</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 mt-4 mr-4">
+        <div
+          onClick={handleAIExpenses}
+          className="relative flex items-center gap-2 px-4 py-2 cursor-pointer rounded-lg 
+                    border-2 border-yellow-400
+                    bg-gradient-to-r from-maincolor to-teal-500 
+                    shadow-lg shadow-green-500/50 transition-all duration-300 
+                    hover:scale-105 hover:shadow-xl hover:shadow-teal-400/60"
+        >
+          {/* Magic Glow Animation */}
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-teal-400 to-green-500 opacity-20 blur-md"></div>
+
+          {/* Icon & Text */}
+          <StarsIcon size={22} className="text-yellow-300 drop-shadow-md animate-pulse" />
+          <span className="font-bold text-[14px] text-white tracking-wide">
+             مصروف جديد بنقرة واحدة
+          </span>
         </div>
       </div>
 

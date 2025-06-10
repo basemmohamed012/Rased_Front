@@ -27,6 +27,10 @@ import EditBudgetPage from './components/Pages/Budget/BudgetContent/EditBudgetPa
 import EditIncomePage from './components/Pages/Income/ContentIncome/EditIncomePage.jsx';
 import AddExpenses from './components/Pages/Expenses/ContentExpenses/AddExpenses.jsx';
 import EditExpensePage from './components/Pages/Expenses/ContentExpenses/EditExpensePage.jsx';
+import Friends from  './components/Pages/Friends/Friends.jsx';
+import Goals from  './components/Pages/Goals/Goals.jsx';
+import AIExpensePage from './components/Pages/Expenses/AIExpensePage.jsx';
+
 
 function App() {
   useEffect(() => {
@@ -79,10 +83,13 @@ function App() {
           {/* Expenses */}
           <Route path='/expenses' element={<Expenses />} />
           <Route path='/add-expense' element={<AddExpenses />} />
+          <Route path='/expense-cv' element={<AIExpensePage />} />
           <Route path='/edit-expense/:id' element={<EditExpensePage />} />
 
-          {/* <Route path="/wallets" element={<Wallet />} /> */}          
+          {/* Extras */}
           <Route path='/notification' element={<Notification />} />
+          <Route path='/friendships' element={<Friends />} />
+          <Route path='/friendships' element={<Goals />} />
         </Routes>
 
       </ErrorBoundary>

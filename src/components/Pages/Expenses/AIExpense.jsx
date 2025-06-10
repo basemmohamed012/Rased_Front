@@ -8,6 +8,7 @@ import { decryptToken } from '../../helpers/TokenHelper'
 import { useLocation } from 'react-router-dom';
 
 const AIExpense = () => {
+  const navigate = useNavigate();
   const [selectedWallet, setSelectedWallet] = useState('');
   const [selectedSharedWallet, setSelectedSharedWallet] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -105,7 +106,6 @@ const AIExpense = () => {
             if(err.response && err.response.data.errors.length > 0)
                 toast.error(err.response.data.errors.join(', ') || 'حدث خطأ ما');
         } finally {
-          setLoading(false);
         }
       }
 
@@ -144,8 +144,6 @@ const AIExpense = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     
-    console.log(imageForm);
-
     if (!uploadedImage || (!selectedWallet && !selectedSharedWallet)) {
       alert('يرجى اختيار صورة ومحفظة');
       return;
@@ -168,21 +166,29 @@ const AIExpense = () => {
         }
       });
       
-      console.log(response);
-
       // Check errors
       if(response.data.succeeded === false || response === null || response.data === null) {
           toast.error(response.data.message || 'خطأ في إنشاء مصروف جديدة!');
           return;
       }
       else {
-        console.log('Success');
-        // localStorage.setItem('message', 'تم إنشاء مصروف جديد بنجاح');
-        // navigate('/expenses');
+        const resp = response.data;
+        localStorage.setItem('message', 'تأكد من البيانات واحفظها 🚀');
+        navigate('/add-expense', {
+          state: {
+            from: 'ai',
+            data: {
+              wId: selectedWallet,
+              swId: selectedSharedWallet,
+              amount: resp.totalPrice,
+              title: resp.description,
+              date: new Intl.DateTimeFormat('en-CA').format(new Date(resp.date)) // Ensures 'YYYY-MM-DD'
+            }
+          }
+        });
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();

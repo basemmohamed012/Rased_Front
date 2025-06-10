@@ -6,9 +6,7 @@ import MangeBudget from './BudgetContent/mangeBudget.jsx';
 import StateMangeBudget from './BudgetContent/StateMangeBudget.jsx'
 import SimpleBarchart from './BudgetContent/SimpleBarchart.jsx'
 import PieCharts from './BudgetContent/Piecharts.jsx'
-import Category from './BudgetContent/Category.jsx'
 import WalletBudgetCards from './BudgetContent/BudgetCards.jsx/WalletBudgetCards.jsx';
-import NotificationsList from '../User/contentUserPage/NotificationsList.jsx';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Spinner } from '../../helpers/Spinner.jsx';

@@ -28,7 +28,6 @@ const EditWalletModal = ({ onClose, onEdit, walletId, token, editLoading }) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log(response);
         // Set Wallet
         const resp = response.data.data;
         if(resp === null || resp === undefined) {
@@ -75,7 +74,7 @@ const EditWalletModal = ({ onClose, onEdit, walletId, token, editLoading }) => {
         setColors(resp.color);
       }
       catch(err) {
-        console.err(err);
+        // console.err(err);
       }
     }
 

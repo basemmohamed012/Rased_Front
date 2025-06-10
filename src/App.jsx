@@ -23,6 +23,7 @@ import BudgetWalletsPage from './components/Pages/Extensions/BudgetWalletsPage.j
 import EditUserPage from './components/Pages/User/EditUserPage.jsx';
 import AddNewIncome from './components/Pages/Income/ContentIncome/AddNewIncome.jsx';
 import ShowSharedWalletDetailsSection from './components/Pages/ShareWalletDetails/ShowSharedWalletDetailsSection.jsx';
+import ShowIndividualWalletDetails from './components/Pages/WalletDetails/ShowIndividualWalletDetails.jsx';
 import EditBudgetPage from './components/Pages/Budget/BudgetContent/EditBudgetPage.jsx';
 import EditIncomePage from './components/Pages/Income/ContentIncome/EditIncomePage.jsx';
 import AddExpenses from './components/Pages/Expenses/ContentExpenses/AddExpenses.jsx';
@@ -64,6 +65,7 @@ function App() {
 
           {/* Wallets */}
           <Route path='/personal-wallets' element={<ShowWalletIndividualOnly />} />
+          <Route path='/wallet/details' element={<ShowIndividualWalletDetails />} />
 
           {/* Shared Wallets */}
           <Route path='/shared-wallets' element={<ShowSharedWalletOnly />} />
@@ -87,9 +89,9 @@ function App() {
           <Route path='/edit-expense/:id' element={<EditExpensePage />} />
 
           {/* Extras */}
-          <Route path='/notification' element={<Notification />} />
+          <Route path='/notifications' element={<Notification />} />
           <Route path='/friendships' element={<Friends />} />
-          <Route path='/friendships' element={<Goals />} />
+          <Route path='/goals' element={<Goals />} />
         </Routes>
 
       </ErrorBoundary>

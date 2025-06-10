@@ -18,7 +18,6 @@ const ResetPassword = () => {
 
   // Get the required data from local storage
   const userEmail = localStorage.getItem('user-email');
-  const message = localStorage.getItem('message');
   const accountStatus = localStorage.getItem('acc-stat');
   const userOtp = localStorage.getItem('otp');
 
@@ -31,9 +30,15 @@ const ResetPassword = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-      if(message) 
+      const message = localStorage.getItem('message');
+
+      if(message) {
         toast.success(message);
-    }, 1000);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
+      }
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -54,8 +59,6 @@ const ResetPassword = () => {
       ...formData,
       [field]: value
     });
-
-    console.log('Form Data:', formData); // Debugging line to check form data
   };
 
   // Validation Function

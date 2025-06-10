@@ -2,12 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import nazra from '../../assets/images/nazra.svg';
 import wallet from '../../assets/images/wallet.svg';
 import arow from '../../assets/images/arowblack.svg';
-import penwa from '../../assets/images/penWa.svg';
-import sharewa from '../../assets/images/sharewa.svg';
 import arowwhite from '../../assets/images/arrowwhite.svg';
 import wallet1 from '../../assets/images/wallet1.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Target, Rocket, StarsIcon, DollarSignIcon } from 'lucide-react';
+import { Target, Rocket, StarsIcon, DollarSignIcon, Goal, Save } from 'lucide-react';
 
 
 const SidebarWallet = () => {
@@ -46,6 +44,10 @@ const SidebarWallet = () => {
 
   const handleAIExpenses = () => {
     navigate('/expense-cv');
+  }
+
+  const handleGoals = () => {
+    navigate('/goals');
   }
 
 
@@ -183,17 +185,43 @@ const SidebarWallet = () => {
           <span className="font-bold text-[14px]">مصــــادر الدخـــــــــل</span>
         </div>
       </div>
+
       <div className="flex items-center gap-2 mt-4 mr-4">
         <div onClick={handleExpenses} className="flex gap-2 cursor-pointer">
           <DollarSignIcon size={18} className='text-yellow-300' />
           <span className="font-bold text-[14px]">المصروفــــــات</span>
         </div>
       </div>
+
+      <div className="flex items-center gap-2 mt-4 mr-4">
+        <div onClick={handleGoals} className="flex gap-2 cursor-pointer">
+          <Goal size={18} className='text-yellow-300' />
+          <div className='flex justify-between gap-3 items-center'>
+            <span className="font-bold text-[14px]">الأهــــــــداف</span>
+            <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
+              قريبـًـــــــــا
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 mt-4 mr-4">
+        <div onClick={handleGoals} className="flex gap-2 cursor-pointer">
+          <Save size={18} className='text-yellow-300' />
+          <div className='flex justify-between gap-3 items-center'>
+            <span className="font-bold text-[14px]">المدّخـــــــرات</span>
+            <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
+              قريبـًـــــــــا
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="flex items-center gap-2 mt-4 mr-4">
         <div
           onClick={handleAIExpenses}
           className="relative flex items-center gap-2 px-4 py-2 cursor-pointer rounded-lg 
-                    border-2 border-yellow-400
+                    border-2 border-white
                     bg-gradient-to-r from-maincolor to-teal-500 
                     shadow-lg shadow-green-500/50 transition-all duration-300 
                     hover:scale-105 hover:shadow-xl hover:shadow-teal-400/60"

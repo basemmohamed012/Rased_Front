@@ -97,9 +97,6 @@ const EditExpense = () => {
             apiUrl = `${API_BASE_URL}/budgets/wallets/${wId}/valid`;
           if(swId !== null)
             apiUrl = `${API_BASE_URL}/budgets/wallets/${swId}/valid?isShared=true`;
-          
-          console.log(apiUrl);
-
           // API Call
           const response = await axios.get(apiUrl, {
             headers: {
@@ -130,7 +127,6 @@ const EditExpense = () => {
         // Check if the response is valid
         if(response.data.succeeded === true && response.data.data) {
             const expenseData = response.data.data;
-            console.log(expenseData);
 
             form.WalletId = expenseData.walletId;
             form.SharedWalletId = expenseData.sharedWalletId;
@@ -179,7 +175,6 @@ const EditExpense = () => {
     [name]: value,
     });
 
-    console.log(form);
   };
 
   const handleSubmit = async (e) => {
@@ -195,7 +190,6 @@ const EditExpense = () => {
       setLoading(true);
 
       const apiUrl = `${API_BASE_URL}/expenses/${id}`;
-      console.log(form);
       // API Call
       const response = await axios.put(apiUrl, form, {
         headers: {
@@ -218,7 +212,6 @@ const EditExpense = () => {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();

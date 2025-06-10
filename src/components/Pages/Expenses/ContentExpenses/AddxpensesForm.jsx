@@ -1,12 +1,13 @@
 import exportImg from '../../../../assets/images/export.svg'
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ACCOUNT_STATUS, API_BASE_URL } from "../../../../constants/AppConstants.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { decryptToken } from '../../../helpers/TokenHelper'
 
 export default function ExpenseForm() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [walletName, setWalletName] = useState('');
@@ -52,10 +53,16 @@ export default function ExpenseForm() {
           // decrypt the access token
           originalAcessToken = decryptToken(accessToken);
           setToken(originalAcessToken);
-          
+          // If there is a message
+          const msg = localStorage.getItem('message');
+          if(msg) {
+            toast.success(msg);
+            setTimeout(() => {
+              localStorage.removeItem('message');
+            }, 1000);
+          }
           // Get the required data
           setWalletName(localStorage.getItem('walletName'));
-
           if(localStorage.getItem('walletId') !== "null") {
             form.WalletId = localStorage.getItem('walletId');
             wId = localStorage.getItem('walletId');
@@ -79,6 +86,21 @@ export default function ExpenseForm() {
           // Check errors
           if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
               setCategories(response.data.data);
+
+              // set Category Name, if AI
+              if(location.state.from === 'ai') {
+                form.CategoryName = 'أخري';
+                const selectedCategory = response.data.data.find(
+                  category => category.name === 'أخري'
+                );
+                form.SubCategoryId = selectedCategory.subCategories[0].id;
+              
+                if (selectedCategory) {
+                  setFilteredSubcategories(selectedCategory.subCategories);
+                } else {
+                  setFilteredSubcategories([]);
+                }
+              }
           }
         } catch (err) {
             if(err.response && err.response.data.errors.length > 0)
@@ -134,6 +156,18 @@ export default function ExpenseForm() {
         }
       }
       fetchBudgets();
+
+      // If the redirection from AI
+      if(location.state.from === 'ai') {
+        const dt = location.state.data;
+        form.WalletId = dt.wId;
+        form.SharedWalletId = dt.swId;
+        form.Amount = dt.amount;
+        form.Title = dt.title;
+        form.Description = dt.title;
+        form.Date = dt.date;
+        form.PaymentMethodId = 1;
+      }
     }, []);
   
   // Update subcategories when category changes
@@ -150,7 +184,8 @@ export default function ExpenseForm() {
       }
       
       // Reset subcategory selection when category changes
-      setForm(prev => ({ ...prev, SubCategoryId: "" }));
+      if(location.state.from !== 'ai')
+        setForm(prev => ({ ...prev, SubCategoryId: "" }));
     } else {
       setFilteredSubcategories([]);
     }
@@ -171,8 +206,6 @@ export default function ExpenseForm() {
       } else {
           setForm(prev => ({ ...prev, [name]: value }));
       }
-
-      console.log(form);
   };
 
   // Function to remove the uploaded file
@@ -198,7 +231,6 @@ export default function ExpenseForm() {
       setLoading(true);
 
       const apiUrl = `${API_BASE_URL}/expenses`;
-      console.log(form);
       // API Call
       const response = await axios.post(apiUrl, form, {
         headers: {
@@ -222,7 +254,6 @@ export default function ExpenseForm() {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();
@@ -256,12 +287,16 @@ export default function ExpenseForm() {
     <div>
       <div className='flex justify-between items-center'>
         <div className='flex-col gap-2 justify-start'>
-          <h2 className="text-[20px] font-bold text-maincolor  mb-2 ">إنشاء مصروف جديد</h2>
+          <h2 className="text-[20px] font-bold text-maincolor mb-2 ">{ location.state.from === 'ai' ? 'تأكد من البيانات الناتجة عن الذكاء الإصطناعي ✨' : 'إنشاء مصروف جديد' }</h2>
         </div>
-        <div className='flex justify-end items-center gap-6'>
-          <p className='text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
-          <p className='text-maincolor font-semibold'><span className='text-3xl'>💰</span> {currency}</p>
-        </div>
+        {
+          location.state.from !== 'ai' ? (
+            <div className='flex justify-end items-center gap-6'>
+              <p className='text-maincolor font-semibold'><span className='text-3xl'>💼</span> {walletName}</p>
+              <p className='text-maincolor font-semibold'><span className='text-3xl'>💰</span> {currency}</p>
+            </div>   
+          ) : ('')
+        }
       </div>
       <div className="w-[1020px] h-auto mx-auto bg-white p-8 rounded-lg shadow mt-8">
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -313,9 +348,15 @@ export default function ExpenseForm() {
               >
                 <option value="">اختر طريقة الدفع المناسبة</option>
                 {payments.map(payment => (
-                  <option key={payment.id} value={payment.id}>
-                    {payment.name}
-                  </option>
+                  form.PaymentMethodId === payment.id ? (
+                    <option key={payment.id} value={payment.id} selected>
+                      {payment.name}
+                    </option>
+                  ) : (
+                    <option key={payment.id} value={payment.id}>
+                      {payment.name}
+                    </option>
+                  )
                 ))}
               </select>
             </div>
@@ -342,9 +383,15 @@ export default function ExpenseForm() {
             >
               <option value="">اختـــــــر</option>
               {categories.map(category => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
-                </option>
+                form.CategoryName === 'أخري' && category.name === 'أخري' ? (
+                  <option key={category.id} value={category.name} selected>
+                    {category.name}
+                  </option>
+                ) : (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                )
               ))}
             </select>
           </div>
@@ -360,9 +407,15 @@ export default function ExpenseForm() {
             >
               <option value="">اختـــــــر</option>
               {filteredSubcategories.map(subcategory => (
-                <option key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name}
-                </option>
+                subcategory.name === 'أخري' ? (
+                  <option key={subcategory.id} value={subcategory.id} selected>
+                    {subcategory.name}
+                  </option>
+                ) : (
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {subcategory.name}
+                  </option>
+                )
               ))}
             </select>
           </div>
@@ -387,56 +440,60 @@ export default function ExpenseForm() {
             </div>
           </div>
 
-          <div>
-            <label className="block mb-1 font-bold text-right">فاتورة / ملف إضافي</label>
-            <div className="border-dashed border-2 border-[#A9A6A6] p-10 text-center rounded-lg relative">
-                {!form.Attachment ? (
-                    // Show upload area when no file is selected
-                    <>
-                        <input
-                            type="file"
-                            name="Attachment"
-                            className="hidden"
-                            id="fileUpload"
-                            onChange={handleChange}
-                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
-                        />
-                        <label htmlFor="fileUpload" className="cursor-pointer text-[#16423C] font-bold">
-                            <img
-                                className='mx-auto mb-4'
-                                src={exportImg} 
-                                alt="" 
+          {
+            location.state.from !== 'ai' ? (
+              <div>
+                <label className="block mb-1 font-bold text-right">فاتورة / ملف إضافي</label>
+                <div className="border-dashed border-2 border-[#A9A6A6] p-10 text-center rounded-lg relative">
+                    {!form.Attachment ? (
+                        // Show upload area when no file is selected
+                        <>
+                            <input
+                                type="file"
+                                name="Attachment"
+                                className="hidden"
+                                id="fileUpload"
+                                onChange={handleChange}
+                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
                             />
-                        </label>
-                        <p className="text-sm text-gray-500 mt-2">
-                            (إضافة ملفات لا تتجاوز 5 ميغابايت على الأكثر)
-                        </p>
-                    </>
-                ) : (
-                    // Show file info when file is selected
-                    <div className="flex items-center justify-center space-x-4 rtl:space-x-reverse">
-                        <div className="text-center">
-                            <div className="text-green-600 text-lg mb-2">✓</div>
-                            <p className="text-[#16423C] font-bold text-sm">
-                                {form.Attachment.name}
+                            <label htmlFor="fileUpload" className="cursor-pointer text-[#16423C] font-bold">
+                                <img
+                                    className='mx-auto mb-4'
+                                    src={exportImg} 
+                                    alt="" 
+                                />
+                            </label>
+                            <p className="text-sm text-gray-500 mt-2">
+                                (إضافة ملفات لا تتجاوز 5 ميغابايت على الأكثر)
                             </p>
-                            <p className="text-gray-500 text-xs">
-                                {(form.Attachment.size / 1024 / 1024).toFixed(2)} ميغابايت
-                            </p>
+                        </>
+                    ) : (
+                        // Show file info when file is selected
+                        <div className="flex items-center justify-center space-x-4 rtl:space-x-reverse">
+                            <div className="text-center">
+                                <div className="text-green-600 text-lg mb-2">✓</div>
+                                <p className="text-[#16423C] font-bold text-sm">
+                                    {form.Attachment.name}
+                                </p>
+                                <p className="text-gray-500 text-xs">
+                                    {(form.Attachment.size / 1024 / 1024).toFixed(2)} ميغابايت
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={removeFile}
+                                className="bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold transition-colors"
+                                title="إزالة الملف"
+                            >
+                                ×
+                            </button>
                         </div>
-                        <button
-                            type="button"
-                            onClick={removeFile}
-                            className="bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold transition-colors"
-                            title="إزالة الملف"
-                        >
-                            ×
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
-
+                    )}
+                </div>
+              </div>
+            ) : ('')
+          }
+          
           <div className="flex justify-start gap-8 mt-10">
             <button
               type="submit"

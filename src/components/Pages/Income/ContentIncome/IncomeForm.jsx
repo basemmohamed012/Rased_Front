@@ -60,8 +60,6 @@ const IncomeForm = () => {
 
           // API Call
           const response = await axios.get(apiUrl);
-
-          console.log(response);
           
           // Check errors
           if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
@@ -83,7 +81,6 @@ const IncomeForm = () => {
       ...form,
       [name]: value,
     });
-    // console.log(form);
   };
 
   const handleSubmit = async (e) => {
@@ -121,7 +118,6 @@ const IncomeForm = () => {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();

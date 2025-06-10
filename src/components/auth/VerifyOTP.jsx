@@ -21,7 +21,6 @@ const VerifyOTP = () => {
   const userOtp = localStorage.getItem('otp');
   const userEmail = localStorage.getItem('user-email');
   const rememberMe = localStorage.getItem('remember-me') || false;
-  const message = localStorage.getItem('message');
 
   // Initial page load
   useEffect(() => {
@@ -39,9 +38,15 @@ const VerifyOTP = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-      if(message)
+      const message = localStorage.getItem('message');
+
+      if(message) {
         toast.success(message);
-    }, 1000);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
+      }
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -111,8 +116,6 @@ const VerifyOTP = () => {
         otp: otpValue
       });
 
-      console.log(response);
-
       let dataResponse = response.data.data;
       // [1] If there are errors in the email or the account is banned
       if(dataResponse.hasEmailError === true || dataResponse.isBanned === true) {
@@ -149,8 +152,6 @@ const VerifyOTP = () => {
       }
       
     } catch (err) {
-      console.log(err);
-
       // Handle unsuccessful submission
       if(err.status !== 200 || !err.response.data.succeeded) {
         let errors = err.response.data.errors;

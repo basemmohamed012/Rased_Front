@@ -13,7 +13,7 @@ const EditUser = () => {
     const [form, setForm] = useState({
         FullName: '',
         UserName: '',
-        DateOfBirth: '',
+        DateOfBirth: null,
         Address: '',
         ProfilePic: null
     });
@@ -82,7 +82,7 @@ const EditUser = () => {
                 // Fill Form Data
                 form.FullName = resp.fullName || '';
                 form.UserName = resp.userName || '';
-                form.DateOfBirth = resp.dateOfBirth || '';
+                form.DateOfBirth = resp.dateOfBirth || null;
                 form.Address = resp.address || '';
                 
                 // Receiving the image as bytes
@@ -182,8 +182,7 @@ const EditUser = () => {
                 // const previewUrl = URL.createObjectURL(file);
                 setProfileImage(arrayBufferToBase64(bytes));
             } catch (error) {
-                console.error('Error processing image:', error);
-                alert('حدث خطأ أثناء معالجة الصورة');
+                toast.error(error);
             }
         }
     };

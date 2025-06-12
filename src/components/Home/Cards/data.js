@@ -37,7 +37,7 @@ export const Testimonials = [
   },
   {
     id: 4,
-    name: " ايمن علاء",
+    name: "باسم محمد",
     image: img2,
 
     image3:img3,
@@ -48,7 +48,7 @@ export const Testimonials = [
   },
   {
     id: 5,
-    name: " فوزي الفرماوي",
+    name: "محمد المحلاوي",
     image: img1,
    
     image3:img3,
@@ -60,9 +60,9 @@ export const Testimonials = [
   
   {
     id: 6,
-    name: " ياسين علي",
-    image: img2,
-    image2:img2,
+    name: "بسنت محمد",
+    image: img3,
+    image2:img3,
     image3:img3,
     image5:img5,
     text: "التطبيق غير طريقة إدارتي لأموالي تمامًا! الذكاء الاصطناعي يساعدني في تتبع نفقاتي وتحديد ميزانيتي بسهولة، والأمان المتقدم يجعلني أشعر بالثقة الكاملة أثناء التعامل المالي. تجربة رائعة أوصي بها بشدة!" ,

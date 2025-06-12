@@ -72,7 +72,7 @@ const LandingPageFooter = () => {
   
               {/* Copyright */}
               <div>
-                <p className="text-sm lg:relative lg:right-16 hover:text-[#2E5077] dark:hover:text-[#79D7BE]">© 2025 راصد، كل الحقوق محفوظة</p>
+                <p className="text-sm lg:relative lg:right-16 dark:hover:text-[#79D7BE]">© 2025 راصد، كل الحقوق محفوظة</p>
               </div>
             </div>
           </div>

@@ -51,7 +51,7 @@ const Financial = () => {
         </p>
         <button
          className="bg-white w-[161px] h-[54px] text-green-900 font-semibold px-6 py-2 rounded-full hover:bg-green-100 mt-10 transition">
-          <div onClick={() => window.location.href = '/login'} className="flex gap-x-10">
+          <div onClick={() => window.location.href = '#'} className="flex gap-x-10">
             <p>تتبّع الآن</p>
             <img src={arrowbtn} alt="" />
           </div>

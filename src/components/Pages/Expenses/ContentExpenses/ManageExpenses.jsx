@@ -24,10 +24,10 @@ const ManageExpenses = () => {
              <Date />
             <button
             onClick={handleClick}
-            className='w-[180px] h-[44px] bg-[#16423C]  gap-[10px] rounded-[10px] pt-[10px] pr-[32px] pb-[10px] pl-[32px]' 
+            className='w-[190px] h-[44px] bg-[#16423C]  gap-[10px] rounded-[10px] pt-[10px] pr-[32px] pb-[10px] pl-[32px]' 
             >
                <p className='text-white text-[16px] font-bold'>
-                 + إضافة ميزانية
+                 + إضافة مصروف
                </p>
             </button>
         </div>

@@ -272,7 +272,7 @@ const AIExpense = () => {
                         </div>
                       </div>
                       <p className="text-lg font-semibold text-purple-700 animate-pulse">
-                        ✨ السحر يحدث الآن... ✨
+                        ✨ لحظات مذهلة تتشكل الآن... ✨
                       </p>
                       <p className="text-sm text-purple-600 mt-2">جاري تحليل الفاتورة بالذكاء الاصطناعي</p>
                     </div>
@@ -399,7 +399,7 @@ const AIExpense = () => {
                 </span>
                 {isSaving && (
                   <div className="absolute inset-0 flex items-center justify-center text-white font-bold">
-                    جاري السحر... ✨
+                    جاري المعالجة... ✨
                   </div>
                 )}
               </button>

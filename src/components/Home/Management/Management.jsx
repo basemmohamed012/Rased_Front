@@ -22,7 +22,7 @@ const Management = () => {
             </p>
 
             <Link
-              to='/login'
+              to='#'
               className="inline-block w-[185px] h-[54px] pt-4 pr-10 pb-4 pl-10 bg-[#16423C] text-white rounded-[5px] lg:relative lg:top-10 lg:right-14 hover:bg-[#2d705e] dark:bg-[#2E5077]"
             >
               تسجيل الدخول

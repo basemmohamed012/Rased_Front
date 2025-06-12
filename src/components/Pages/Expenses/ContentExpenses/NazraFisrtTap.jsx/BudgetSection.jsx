@@ -35,9 +35,9 @@ const BudgetCard = ({
 
       <p className="text-xs text-gray-600 mb-4">{message}</p>
 
-      <button className="w-full py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100 transition">
+      {/* <button className="w-full py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100 transition">
         تعديل الميزانية
-      </button>
+      </button> */}
     </div>
   );
 };

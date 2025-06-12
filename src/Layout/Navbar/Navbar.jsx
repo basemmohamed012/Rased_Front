@@ -13,8 +13,8 @@ const Navbar = () => {
 
   const links = [
     { name: "الرئيسية", path: "/" },
-    { name: "من نحن", path: "/about" },
-    { name: "تواصل معنا", path: "/wallets" },
+    { name: "من نحن", path: "#" },
+    { name: "تواصل معنا", path: "/#" },
     // { name: "الحساب الشخصي", path: "/profile" },
   ];
 
@@ -70,7 +70,7 @@ const Navbar = () => {
               </button>
             ))}
 
-            <div className="flex flex-col w-full items-center gap-3 mt-4">
+            {/* <div className="flex flex-col w-full items-center gap-3 mt-4">
               <button
                 onClick={() => {
                   navigate("/login");
@@ -89,7 +89,7 @@ const Navbar = () => {
               >
                 إنشاء حساب
               </button>
-            </div>
+            </div> */}
           </motion.div>
         )}
       </AnimatePresence>

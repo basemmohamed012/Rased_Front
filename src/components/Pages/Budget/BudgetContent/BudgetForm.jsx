@@ -101,7 +101,6 @@ export default function BudgetForm() {
       ...form,
       [name]: value,
     });
-    // console.log(form);
   };
 
   const handleSubmit = async (e) => {

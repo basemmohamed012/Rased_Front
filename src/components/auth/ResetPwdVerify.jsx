@@ -24,7 +24,15 @@ const ResetPwdVerify = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+      const message = localStorage.getItem('message');
+
+      if(message) {
+        toast.success(message);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
+      }
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -44,8 +52,6 @@ const ResetPwdVerify = () => {
       ...formData,
       [field]: value
     });
-
-    console.log('Form Data:', formData); // Debugging line to check form data
   };
 
   // Function to handle form submission
@@ -83,6 +89,7 @@ const ResetPwdVerify = () => {
       navigate('/verify-otp');
       
     } catch (err) {
+      console.log(err);
       // Check if the response has errors
       if(err.status !== 200 || !err.response.data.succeeded) {
         let errors = err.response.data.errors;
@@ -146,6 +153,7 @@ const ResetPwdVerify = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
+                  placeholder='ex@example.com'
                   className="p-2 rounded border-2 border-graycolor focus:border-maincolor w-full" 
                 />
               </div>
@@ -163,7 +171,7 @@ const ResetPwdVerify = () => {
               <div className="text-center mb-6">
                   <p className="text-maincolor text-[14px] font-bold">
                     رجوع إلي ... {' '}
-                    <span onClick={() => navigate('/signup')} className="text-gray-400 hover:underline hover:text-maincolor cursor-pointer">
+                    <span onClick={() => navigate('/login')} className="text-gray-400 hover:underline hover:text-maincolor cursor-pointer">
                       تسجيل الدخول
                     </span>
                   </p>

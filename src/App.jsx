@@ -23,10 +23,15 @@ import BudgetWalletsPage from './components/Pages/Extensions/BudgetWalletsPage.j
 import EditUserPage from './components/Pages/User/EditUserPage.jsx';
 import AddNewIncome from './components/Pages/Income/ContentIncome/AddNewIncome.jsx';
 import ShowSharedWalletDetailsSection from './components/Pages/ShareWalletDetails/ShowSharedWalletDetailsSection.jsx';
+import ShowIndividualWalletDetails from './components/Pages/WalletDetails/ShowIndividualWalletDetails.jsx';
 import EditBudgetPage from './components/Pages/Budget/BudgetContent/EditBudgetPage.jsx';
 import EditIncomePage from './components/Pages/Income/ContentIncome/EditIncomePage.jsx';
 import AddExpenses from './components/Pages/Expenses/ContentExpenses/AddExpenses.jsx';
 import EditExpensePage from './components/Pages/Expenses/ContentExpenses/EditExpensePage.jsx';
+import Friends from  './components/Pages/Friends/Friends.jsx';
+import Goals from  './components/Pages/Goals/Goals.jsx';
+import AIExpensePage from './components/Pages/Expenses/AIExpensePage.jsx';
+
 
 function App() {
   useEffect(() => {
@@ -60,6 +65,7 @@ function App() {
 
           {/* Wallets */}
           <Route path='/personal-wallets' element={<ShowWalletIndividualOnly />} />
+          <Route path='/wallet/details' element={<ShowIndividualWalletDetails />} />
 
           {/* Shared Wallets */}
           <Route path='/shared-wallets' element={<ShowSharedWalletOnly />} />
@@ -79,10 +85,13 @@ function App() {
           {/* Expenses */}
           <Route path='/expenses' element={<Expenses />} />
           <Route path='/add-expense' element={<AddExpenses />} />
+          <Route path='/expense-cv' element={<AIExpensePage />} />
           <Route path='/edit-expense/:id' element={<EditExpensePage />} />
 
-          {/* <Route path="/wallets" element={<Wallet />} /> */}          
-          <Route path='/notification' element={<Notification />} />
+          {/* Extras */}
+          <Route path='/notifications' element={<Notification />} />
+          <Route path='/friendships' element={<Friends />} />
+          <Route path='/goals' element={<Goals />} />
         </Routes>
 
       </ErrorBoundary>

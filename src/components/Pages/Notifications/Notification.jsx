@@ -99,12 +99,15 @@ const [visibleCount, setVisibleCount] = useState(6);
  >
          لديك {notifications.length} إشعار. تصفح لتراها!</p>
        </div>
-        <button className="bg-[#EDEDED] w-[185px] h-[51px]  rounded-[15px] gap-[10px] pt-4 pr-3 pb-4 pl-8">
+        {/* <button className="bg-[#EDEDED] w-[185px] h-[51px]  rounded-[15px] gap-[10px] pt-4 pr-3 pb-4 pl-8">
           
           <p className="text-[#9A9595] font-bold text-base leading-none tracking-normal whitespace-nowrap ">
           تعيين الجميع كمقروءة
           </p>
-        </button>
+        </button> */}
+        <p className='text-maincolor rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-error py-2 px-8 text-[16px] font-bold'>
+          قريبـًـــــــــا
+        </p>
       </div>
 
       <div className="flex bg-[rgba(38,80,58,0.1)] gap-4 w-[974px] h-[52px]  justify-between rounded-[15px] pt-2 pr-6 pb-2 pl-6 mb-6 flex-wrap">

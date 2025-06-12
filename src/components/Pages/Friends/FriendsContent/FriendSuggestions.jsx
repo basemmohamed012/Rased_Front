@@ -6,21 +6,21 @@ const friends = [
     name: 'مها عبدالمقصود',
     title: 'محلل مالي خبرة 5+ سنوات',
     mutualFriends: 4,
-    avatar: 'https://randomuser.me/api/portraits/women/1.jpg',
+    avatar: 'https://randomuser.me/api/portraits/men/9.jpg',
   },
   {
     id: 2,
     name: 'مها عبدالمقصود',
     title: 'محلل مالي خبرة 5+ سنوات',
     mutualFriends: 4,
-    avatar: 'https://randomuser.me/api/portraits/men/2.jpg',
+    avatar: 'https://randomuser.me/api/portraits/men/9.jpg',
   },
   {
     id: 3,
     name: 'مها عبدالمقصود',
     title: 'محلل مالي خبرة 5+ سنوات',
     mutualFriends: 4,
-    avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
+    avatar: 'https://randomuser.me/api/portraits/men/9.jpg',
   },
 ];
 

@@ -23,16 +23,13 @@ export default function AddSharedWalletModal({ onClose, onSave, saveLoading }) {
       const apiUrl = `${API_BASE_URL}/Wallets/DataParts`;
       try {
         const response = await axios.get(apiUrl);
-
-        console.log(response);
-
         const resp = response.data.data;
         setCurrencies(resp.currency);
         setStatusData(resp.status);
         setColors(resp.color);
       }
       catch(err) {
-        console.err(err);
+        // console.err(err);
       }
     }
 

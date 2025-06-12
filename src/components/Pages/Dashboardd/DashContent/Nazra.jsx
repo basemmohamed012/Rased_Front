@@ -55,11 +55,11 @@ export default function IncomeOverview() {
       </div>
 
       {/* زر تعديل */}
-      <div className="mt-14 text-center">
+      {/* <div className="mt-14 text-center">
         <button className="bg-[#16423C] text-white w-[311px] h-[49px] rounded-full px-6 py-2 text-sm hover:bg-green-800 transition">
           تعديل
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

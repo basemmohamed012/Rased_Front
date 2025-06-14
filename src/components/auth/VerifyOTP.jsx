@@ -8,6 +8,10 @@ import { ACCOUNT_STATUS, API_BASE_URL } from '../../constants/AppConstants';
 import { encryptToken } from '../helpers/TokenHelper';
 
 const VerifyOTP = () => {
+  // Check the page size
+  if(window.innerWidth <= 1024)
+    navigate('/');
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);

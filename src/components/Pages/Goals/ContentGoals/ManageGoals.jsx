@@ -27,9 +27,9 @@ const MangeBudget = () => {
                   + هدف جديد 
                </p>
             </button> */}
-            <p className='text-maincolor rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-error py-2 px-8 text-[16px] font-bold'>
+            {/* <p className='text-maincolor rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-error py-2 px-8 text-[16px] font-bold'>
               قريبـًـــــــــا
-            </p>
+            </p> */}
         </div>
       </div>
     </div>

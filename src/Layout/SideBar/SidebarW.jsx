@@ -198,9 +198,9 @@ const SidebarWallet = () => {
           <Goal size={18} className='text-yellow-300' />
           <div className='flex justify-between gap-3 items-center'>
             <span className="font-bold text-[14px]">الأهــــــــداف</span>
-            <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
+            {/* <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
               قريبـًـــــــــا
-            </span>
+            </span> */}
           </div>
         </div>
       </div>
@@ -210,9 +210,9 @@ const SidebarWallet = () => {
           <Save size={18} className='text-yellow-300' />
           <div className='flex justify-between gap-3 items-center'>
             <span className="font-bold text-[14px]">المدّخـــــــرات</span>
-            <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
+            {/* <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
               قريبـًـــــــــا
-            </span>
+            </span> */}
           </div>
         </div>
       </div>

@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import NavbarHeader from '../../../Layout/NavbarHeader/NavbarHeader.jsx';
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
-
 import Footer from '../../Home/Footer/Footer';
 import ProfileCard from './contentUserPage/ProfileCard.jsx';
 import  Card  from './contentUserPage/Card.jsx';
-import TransactionsTable from './contentUserPage/TransactionsTable.jsx';
-import FinancialGoals from './contentUserPage/FinancialGoals.jsx';
-import NotificationsList from './contentUserPage/NotificationsList.jsx';
-import ReportsList from './contentUserPage/ReportsList.jsx';
 import  PieChart  from './contentUserPage/Piechart.jsx';
 import { Spinner } from '../../helpers/Spinner.jsx';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import TransactionsTableEx from '../Expenses/ContentExpenses/NazraFisrtTap.jsx/TransactionsTableEx.jsx'
 
 
 const ProfileUser = () => {
@@ -58,8 +54,8 @@ const ProfileUser = () => {
               <PieChart />
                 <PieChart />
               </div>
-              <TransactionsTable />
-              <FinancialGoals />
+              <TransactionsTableEx />
+              {/* <FinancialGoals /> */}
               {/* <NotificationsList /> */}
               {/* <ReportsList /> */}
               </div>

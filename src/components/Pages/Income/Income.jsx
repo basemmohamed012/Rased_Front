@@ -53,7 +53,7 @@ const Budget = () => {
               <Barchart />
               <WalletIncomeCards />
               <SharedWalletIncomeCards />
-              <SmartAnalysis />
+              {/* <SmartAnalysis /> */}
               </div>
             </div>
 

@@ -17,6 +17,10 @@ const ResetPwdVerify = () => {
 
   
   useEffect(() => {
+    // Check the page size
+    if(window.innerWidth <= 1024)
+      navigate('/');
+
     if(localStorage.getItem('acc-stat') === ACCOUNT_STATUS.RESET_PASSWORD) {
       window.history.back();
       return;

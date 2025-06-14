@@ -105,9 +105,9 @@ const [visibleCount, setVisibleCount] = useState(6);
           تعيين الجميع كمقروءة
           </p>
         </button> */}
-        <p className='text-maincolor rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-error py-2 px-8 text-[16px] font-bold'>
+        {/* <p className='text-maincolor rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-error py-2 px-8 text-[16px] font-bold'>
           قريبـًـــــــــا
-        </p>
+        </p> */}
       </div>
 
       <div className="flex bg-[rgba(38,80,58,0.1)] gap-4 w-[974px] h-[52px]  justify-between rounded-[15px] pt-2 pr-6 pb-2 pl-6 mb-6 flex-wrap">

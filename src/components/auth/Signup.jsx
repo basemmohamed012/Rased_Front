@@ -21,6 +21,10 @@ const Signup = () => {
 
   // Simulate loading the page (remove this in production or replace with actual data loading)
   useEffect(() => {
+    // Check the page size
+    if(window.innerWidth <= 1024)
+      navigate('/');
+    
     let accountStatus = localStorage.getItem('acc-stat');
     if(accountStatus) {
       if(accountStatus === ACCOUNT_STATUS.SUSPENDED) {

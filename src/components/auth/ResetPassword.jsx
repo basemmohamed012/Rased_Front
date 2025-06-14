@@ -22,6 +22,10 @@ const ResetPassword = () => {
   const userOtp = localStorage.getItem('otp');
 
   useEffect(() => {
+    // Check the page size
+    if(window.innerWidth <= 1024)
+      navigate('/');
+
     if(!userEmail || !accountStatus || !userOtp || accountStatus !== ACCOUNT_STATUS.RESET_PASSWORD || userOtp !== 'true') {
       localStorage.clear();
       localStorage.setItem('message', 'حدث خطأ ما, حاول مرة أخري');

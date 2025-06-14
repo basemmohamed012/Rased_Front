@@ -10,7 +10,7 @@ const FinancialGoals = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleViewDetails = (id) => {
-    navigate(`/goal/${id}`);
+    navigate(`#`);
   };
 
   const handleAddAmount = () => {

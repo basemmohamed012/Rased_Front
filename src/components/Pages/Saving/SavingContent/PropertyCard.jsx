@@ -8,7 +8,8 @@ export default function PropertyCard({ property }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/details/${property.id}`, { state: { property } });
+    // navigate(`/details/${property.id}`, { state: { property } });
+    navigate('#');
   };
 
   const getStatusColor = (status) => {

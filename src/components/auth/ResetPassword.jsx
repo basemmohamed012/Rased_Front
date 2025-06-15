@@ -18,11 +18,14 @@ const ResetPassword = () => {
 
   // Get the required data from local storage
   const userEmail = localStorage.getItem('user-email');
-  const message = localStorage.getItem('message');
   const accountStatus = localStorage.getItem('acc-stat');
   const userOtp = localStorage.getItem('otp');
 
   useEffect(() => {
+    // Check the page size
+    if(window.innerWidth <= 1024)
+      navigate('/');
+
     if(!userEmail || !accountStatus || !userOtp || accountStatus !== ACCOUNT_STATUS.RESET_PASSWORD || userOtp !== 'true') {
       localStorage.clear();
       localStorage.setItem('message', 'حدث خطأ ما, حاول مرة أخري');
@@ -31,9 +34,15 @@ const ResetPassword = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-      if(message) 
+      const message = localStorage.getItem('message');
+
+      if(message) {
         toast.success(message);
-    }, 1000);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
+      }
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -54,8 +63,6 @@ const ResetPassword = () => {
       ...formData,
       [field]: value
     });
-
-    console.log('Form Data:', formData); // Debugging line to check form data
   };
 
   // Validation Function

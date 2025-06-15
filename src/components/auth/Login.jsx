@@ -21,6 +21,10 @@ const Login = () => {
 
   // Simulate loading the page (remove this in production or replace with actual data loading)
   useEffect(() => {
+    // Check the page size
+    if(window.innerWidth <= 1024)
+      navigate('/');
+
     let accountStatus = localStorage.getItem('acc-stat');
     let otp = localStorage.getItem('otp');
     if(accountStatus) {
@@ -39,10 +43,11 @@ const Login = () => {
       setLoading(false);
       const message = localStorage.getItem('message');
 
-      console.log(message);
-
       if(message) {
         toast.success(message);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
       }
     }, 1500);
 
@@ -54,8 +59,6 @@ const Login = () => {
     let { id, value } = e.target;
     if(id === 'remember-me') {
       value = e.target.checked;
-
-      console.log('from change: ', value);
     }
     
     // Map the HTML id to the formData property
@@ -72,7 +75,6 @@ const Login = () => {
       [field]: value
     });
 
-    console.log('Form Data:', formData); // Debugging line to check form data
   };
 
   // Validation Function

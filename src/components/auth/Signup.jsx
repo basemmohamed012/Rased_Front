@@ -5,8 +5,6 @@ import cradImg from '../../assets/images/CardForm.svg';
 import { Link, useNavigate } from "react-router-dom";
 import { Spinner } from '../helpers/Spinner';
 import { ACCOUNT_STATUS, API_BASE_URL } from '../../constants/AppConstants';
-import { toast } from 'react-toastify';
-
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -23,6 +21,10 @@ const Signup = () => {
 
   // Simulate loading the page (remove this in production or replace with actual data loading)
   useEffect(() => {
+    // Check the page size
+    if(window.innerWidth <= 1024)
+      navigate('/');
+    
     let accountStatus = localStorage.getItem('acc-stat');
     if(accountStatus) {
       if(accountStatus === ACCOUNT_STATUS.SUSPENDED) {
@@ -35,6 +37,14 @@ const Signup = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
+      const message = localStorage.getItem('message');
+
+      if(message) {
+        toast.success(message);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
+      }
     }, 1500);
 
     return () => clearTimeout(timer);
@@ -62,8 +72,6 @@ const Signup = () => {
       ...formData,
       [field]: value
     });
-
-    console.log('Form Data:', formData); // Debugging line to check form data
   };
 
   // Validation Function

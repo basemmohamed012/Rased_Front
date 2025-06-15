@@ -127,7 +127,6 @@ export default function IndividualWalletsSection() {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();
@@ -183,7 +182,6 @@ export default function IndividualWalletsSection() {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();
@@ -245,6 +243,10 @@ export default function IndividualWalletsSection() {
       setDeleteLoading(false);
     }
   };
+
+  const handleView = () => {
+    navigate('/wallet/details');
+  }
   
   return (
     <div className="p-6 w-[1020px] h-auto text-right font-sans">
@@ -284,6 +286,7 @@ export default function IndividualWalletsSection() {
               </div>
               <div className="mt-6 flex justify-center gap-6">
                 <button 
+                  onClick={handleView}
                   className="">
                   <Eye className="text-maincolor cursor-pointer hover:text-gray-500" />
                 </button>

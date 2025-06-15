@@ -19,14 +19,17 @@ const MangeBudget = () => {
             </p>
         </div>
         <div>
-            <button
+            {/* <button
             onClick={handleClick}
             className='w-[180px] h-[44px] bg-[#16423C]  gap-[10px] rounded-[10px] pt-[10px] pr-[32px] pb-[10px] pl-[32px]' 
             >
                <p className='text-white text-[16px] font-bold'>
                   + هدف جديد 
                </p>
-            </button>
+            </button> */}
+            {/* <p className='text-maincolor rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-error py-2 px-8 text-[16px] font-bold'>
+              قريبـًـــــــــا
+            </p> */}
         </div>
       </div>
     </div>

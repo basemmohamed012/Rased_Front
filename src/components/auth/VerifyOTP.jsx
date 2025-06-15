@@ -8,6 +8,10 @@ import { ACCOUNT_STATUS, API_BASE_URL } from '../../constants/AppConstants';
 import { encryptToken } from '../helpers/TokenHelper';
 
 const VerifyOTP = () => {
+  // Check the page size
+  if(window.innerWidth <= 1024)
+    navigate('/');
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +25,6 @@ const VerifyOTP = () => {
   const userOtp = localStorage.getItem('otp');
   const userEmail = localStorage.getItem('user-email');
   const rememberMe = localStorage.getItem('remember-me') || false;
-  const message = localStorage.getItem('message');
 
   // Initial page load
   useEffect(() => {
@@ -39,9 +42,15 @@ const VerifyOTP = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-      if(message)
+      const message = localStorage.getItem('message');
+
+      if(message) {
         toast.success(message);
-    }, 1000);
+        setTimeout(() => {
+          localStorage.removeItem('message');
+        }, 1000);
+      }
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -111,8 +120,6 @@ const VerifyOTP = () => {
         otp: otpValue
       });
 
-      console.log(response);
-
       let dataResponse = response.data.data;
       // [1] If there are errors in the email or the account is banned
       if(dataResponse.hasEmailError === true || dataResponse.isBanned === true) {
@@ -132,6 +139,11 @@ const VerifyOTP = () => {
           let encToken = encryptToken(accessToken);
           // Store it
           localStorage.setItem('acc-token', encToken);
+          // Remove some uncessary data
+          localStorage.removeItem('user-email');
+          localStorage.removeItem('remember-me');
+          localStorage.removeItem('otp');
+          localStorage.removeItem('theme');
           // Navigate to the dashboard
           navigate('/dashboard')
         }
@@ -149,8 +161,6 @@ const VerifyOTP = () => {
       }
       
     } catch (err) {
-      console.log(err);
-
       // Handle unsuccessful submission
       if(err.status !== 200 || !err.response.data.succeeded) {
         let errors = err.response.data.errors;

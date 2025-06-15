@@ -6,6 +6,8 @@ import StatsSection from '../../Pages/WalletDetails/ContentWalletDetails/StatsSe
 import DataTableWalletDetails from './ContentWalletDetails/DataTableWalletDetails.jsx'
 import DataTableWalletDetailsDate from './ContentWalletDetails/DataTableWalletDetailsDate.jsx'
 import Footer from '../../Home/Footer/Footer';
+import Barchart from '../Income/ContentIncome/Barchart.jsx';
+import PerformanceChart from '../Expenses/ContentExpenses/ThirdTap/PerformanceChart'
 
 const Wallet = () => {
   return (
@@ -29,12 +31,12 @@ const Wallet = () => {
           <StatsSection />
           </div>
           <div>
-          <DataTableWalletDetails />
+          <Barchart />
           </div>
           <div className=''>
             
           
-           <DataTableWalletDetailsDate />
+           <PerformanceChart />
 
           </div>
          

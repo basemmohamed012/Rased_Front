@@ -332,9 +332,9 @@ const SharedWalletBudgetCards = () => {
                   <div className="mt-6 border-t pt-4">
                     <div className="flex justify-between items-center mb-4">
                       <p className="text-lg font-semibold">العمليات الحالية:</p>
-                      <button className="bg-blue-800 w-8 h-8 text-white rounded-full hover:bg-blue-900 transition-colors flex items-center justify-center">
+                      {/* <button className="bg-blue-800 w-8 h-8 text-white rounded-full hover:bg-blue-900 transition-colors flex items-center justify-center">
                         <span className="text-lg">+</span>
-                      </button>
+                      </button> */}
                     </div>
                     
                     {selectedBudget.relatedExpenses && selectedBudget.relatedExpenses.length > 0 ? (

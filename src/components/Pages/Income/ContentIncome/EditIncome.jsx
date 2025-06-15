@@ -50,10 +50,7 @@ const EditIncome = () => {
             const apiUrl = `${API_BASE_URL}/IncomeSourceType`;
 
             // API Call
-            const response = await axios.get(apiUrl);
-
-            console.log(response);
-            
+            const response = await axios.get(apiUrl);            
             // Check errors
             if(response.data.succeeded === true && response !== null && response.data !== null && response.data.data !== null) {
                 setCategories(response.data.data);
@@ -104,7 +101,6 @@ const EditIncome = () => {
       ...form,
       [name]: value,
     });
-    // console.log(form);
   };
 
   const handleSubmit = async (e) => {
@@ -138,7 +134,6 @@ const EditIncome = () => {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();

@@ -7,6 +7,8 @@ import MembersTable from '../Members/MemberTable.jsx';
 import AreaChart from '../AreaChart/AreaChart.jsx';
 import  BarChart  from '../BaChart/BarChart.jsx';
 import PerformanceTable from '../PerformanceTable/PerformanceTable.jsx';
+import PerformanceChart from '../../Expenses/ContentExpenses/ThirdTap/PerformanceChart'
+
 const Buttons = () => {
   
 
@@ -31,7 +33,7 @@ const Buttons = () => {
         </div>;
       case "transactions":
         return <div> 
-          <DataTableWalletDetailsDate />
+          <PerformanceChart />
         </div>;
       case "analysis":
         return <div>

@@ -28,7 +28,7 @@ const Heaader = () => {
             <div className="flex -space-x-4 rtl:space-x-reverse">
               {[
                 "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?fit=crop&w=100&h=100",
-                "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fit=crop&w=100&h=100",
+                // "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fit=crop&w=100&h=100",
                 "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=crop&w=100&h=100",
               ].map((src, index) => (
                 <img

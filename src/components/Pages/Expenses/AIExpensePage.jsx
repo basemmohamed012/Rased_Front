@@ -1,33 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import NavbarHeader from '../../../Layout/NavbarHeader/NavbarHeader.jsx';
+import NavbarHeader from '../../../Layout/NavbarHeader/NavbarHeader';
 import SidebarW from '../../../Layout/SideBar/SidebarW.jsx';
-import Footer from '../../Home/Footer/Footer';
-import ProfileCard from './contentUserPage/ProfileCard.jsx';
-import  Card  from './contentUserPage/Card.jsx';
-import  PieChart  from './contentUserPage/Piechart.jsx';
+import { useState, useEffect } from 'react';
+import Footer from '../../Home/Footer/Footer.jsx';
 import { Spinner } from '../../helpers/Spinner.jsx';
-import { toast, ToastContainer } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import TransactionsTableEx from '../Expenses/ContentExpenses/NazraFisrtTap.jsx/TransactionsTableEx.jsx'
+import AIExpense from './AIExpense.jsx';
 
-
-const ProfileUser = () => {
+const AIExpensePage = () => {
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-      const message = localStorage.getItem('message');
-      if(message) {
-        toast.success(message);
-        setTimeout(() => {
-          localStorage.removeItem('message');
-        }, 1000);
-      }
-  
+    useEffect(() => {
       setTimeout(() => {
-          setLoading(false);
-        }, 1000);
+        setLoading(false);
+      }, 1000);
     }, []);
-
 
   return (
     <>
@@ -42,23 +29,17 @@ const ProfileUser = () => {
             {/* Main Content Area */}
             <div className="grid grid-cols-[250px_1fr] rtl:grid-cols-[1fr_250px]">
               {/* Sidebar */}
-              <div className="min-h-[3400px]">
+              <div className="">
                 <SidebarW />
               </div>
 
               {/* Page Content */}
-              <div className="p-6 absolute left-[70px] top-10  space-y-10">
-              <ProfileCard />
-              <Card />
-              <div className='flex gap-16'>
-              <PieChart />
-                <PieChart />
-              </div>
-              <TransactionsTableEx />
-              {/* <FinancialGoals /> */}
-              {/* <NotificationsList /> */}
-              {/* <ReportsList /> */}
-              </div>
+              <div
+                style={{ width: "70%" }}
+                className="p-6 absolute left-[85px] top-20 space-y-10"
+                >
+                <AIExpense />
+                </div>
             </div>
 
             {/* Footer */}
@@ -83,6 +64,6 @@ const ProfileUser = () => {
       }
     </>
   );
-};
+}
 
-export default ProfileUser;
+export default AIExpensePage

@@ -129,7 +129,6 @@ export default function SharedWalletsSection() {
       }
     }
     catch(err) {
-      console.log(err);
       // set the unsuccessful message
       if(err.status === 401) { // UnAuthorized
         localStorage.clear();

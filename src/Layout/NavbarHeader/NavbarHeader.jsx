@@ -114,6 +114,7 @@ const NavbarHeader = () => {
 
   const handleNotificationClick = () => {
     setIsNotificationActive(!isNotificationActive);
+    navigate('/notifications')
   };
 
   const handleProfileClick = () => {
@@ -167,6 +168,10 @@ const NavbarHeader = () => {
     navigate('/dashboard');
   };
 
+  const handleFriends = () => {
+    navigate('/friendships')
+  }
+
   const DarkModeToggle = () => (
     <button className="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-full p-3 transition-all duration-200 group">
       <div className="w-full h-full bg-gradient-to-tr from-yellow-400 to-orange-500 rounded-full group-hover:scale-110 transition-transform duration-200"></div>
@@ -214,7 +219,7 @@ const NavbarHeader = () => {
               </button>
 
               {/* People */}
-              <button className="w-12 h-12 bg-gray-50 hover:bg-green-50 rounded-full flex items-center justify-center transition-all duration-200 group">
+              <button onClick={handleFriends} className="w-12 h-12 bg-gray-50 hover:bg-green-50 rounded-full flex items-center justify-center transition-all duration-200 group">
                 <Users size={20} className="text-gray-600 group-hover:text-green-600" />
               </button>
 

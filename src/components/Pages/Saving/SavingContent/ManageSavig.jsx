@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 const ManageSavig = () => {
   const navigate = useNavigate();
  const handleClick = () => {
-  navigate('/addgoal');
+  navigate('#');
 }
 
   return (

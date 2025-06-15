@@ -6,9 +6,10 @@ import StackedAreaChart from "../../Dashboardd/StackedAreaChart/StackedAreaChart
 import Nazra from '../../Dashboardd/DashContent/Nazra.jsx';
 import DataTable from '../DataTable.jsx';
 import Total from './Total.jsx';
+// import TransactionsTableEx from '../../Expenses/ContentExpenses/NazraFisrtTap.jsx/TransactionsTableEx.jsx'
 
 
-const tabs = ['إجمالي الدخل', 'إجمالي المصروفات', 'عدد العمليات'];
+const tabs = ['إجمالي الدخل', 'عدد العمليات'];
 
 export default function TabsWithTable() {
   const [activeTab, setActiveTab] = useState('إجمالي الدخل');

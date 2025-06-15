@@ -123,7 +123,7 @@ const BudgetWallets = () => {
     else if(location.state && location.state.from === 'income')
       navigate('/add-income');
     else
-      navigate('/add-expense');
+      navigate('/add-expense', { state: { from: 'normal' } });
   }
   
   return (

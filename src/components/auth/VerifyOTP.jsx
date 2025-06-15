@@ -139,6 +139,11 @@ const VerifyOTP = () => {
           let encToken = encryptToken(accessToken);
           // Store it
           localStorage.setItem('acc-token', encToken);
+          // Remove some uncessary data
+          localStorage.removeItem('user-email');
+          localStorage.removeItem('remember-me');
+          localStorage.removeItem('otp');
+          localStorage.removeItem('theme');
           // Navigate to the dashboard
           navigate('/dashboard')
         }

@@ -31,6 +31,7 @@ import EditExpensePage from './components/Pages/Expenses/ContentExpenses/EditExp
 import Friends from  './components/Pages/Friends/Friends.jsx';
 import Goals from  './components/Pages/Goals/Goals.jsx';
 import AIExpensePage from './components/Pages/Expenses/AIExpensePage.jsx';
+import Saving from './components/Pages/Saving/Saving.jsx';
 
 
 function App() {
@@ -92,6 +93,7 @@ function App() {
           <Route path='/notifications' element={<Notification />} />
           <Route path='/friendships' element={<Friends />} />
           <Route path='/goals' element={<Goals />} />
+          <Route path='/savings' element={<Saving />} />
         </Routes>
 
       </ErrorBoundary>

@@ -50,6 +50,10 @@ const SidebarWallet = () => {
     navigate('/goals');
   }
 
+  const handleSavings = () => {
+    navigate('/savings');
+  }
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -206,7 +210,7 @@ const SidebarWallet = () => {
       </div>
 
       <div className="flex items-center gap-2 mt-4 mr-4">
-        <div onClick={handleGoals} className="flex gap-2 cursor-pointer">
+        <div onClick={handleSavings} className="flex gap-2 cursor-pointer">
           <Save size={18} className='text-yellow-300' />
           <div className='flex justify-between gap-3 items-center'>
             <span className="font-bold text-[14px]">المدّخـــــــرات</span>

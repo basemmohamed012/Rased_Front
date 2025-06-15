@@ -5,7 +5,7 @@ import arow from '../../assets/images/arowblack.svg';
 import arowwhite from '../../assets/images/arrowwhite.svg';
 import wallet1 from '../../assets/images/wallet1.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Target, Rocket, StarsIcon, DollarSignIcon, Goal, Save } from 'lucide-react';
+import { Target, Rocket, StarsIcon, DollarSignIcon, Goal, Save, TransgenderIcon } from 'lucide-react';
 
 
 const SidebarWallet = () => {
@@ -52,6 +52,10 @@ const SidebarWallet = () => {
 
   const handleSavings = () => {
     navigate('/savings');
+  }
+
+  const handleTransactions = () => {
+    navigate('/transactions');
   }
 
 
@@ -214,6 +218,18 @@ const SidebarWallet = () => {
           <Save size={18} className='text-yellow-300' />
           <div className='flex justify-between gap-3 items-center'>
             <span className="font-bold text-[14px]">المدّخـــــــرات</span>
+            {/* <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
+              قريبـًـــــــــا
+            </span> */}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 mt-4 mr-4">
+        <div onClick={handleTransactions} className="flex gap-2 cursor-pointer">
+          <TransgenderIcon size={18} className='text-yellow-300' />
+          <div className='flex justify-between gap-3 items-center'>
+            <span className="font-bold text-[14px]">التحويـــــلات المــــالية</span>
             {/* <span className='text-error text-[9px] rounded-md bg-gradient-to-r from-gray-100 to-gray-300 border-2 border-maincolor py-1 px-2 font-semibold'>
               قريبـًـــــــــا
             </span> */}

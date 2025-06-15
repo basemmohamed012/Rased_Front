@@ -17,10 +17,10 @@ import {
 } from "./Ui/Collapsible.jsx";
 import { Input } from "./Ui/Input.jsx";
 import { Separator } from "./Ui/Separator.jsx";
-import img1 from "../../../assets/images/money_9221329.svg";
-import img2 from "../../../assets/images/Ellipse 36.svg";
-import img3 from "../../../assets/images/Ellipse 37.svg";
-import img4 from "../../../assets/images/Ellipse 38.svg";
+import img1 from "../../../assets/images/img1.svg";
+import img2 from "../../../assets/images/img2.svg";
+import img3 from "../../../assets/images/img3.svg";
+import img4 from "../../../assets/images/imgmon.svg";
 
 // Summary card data for mapping
 const summaryCards = [

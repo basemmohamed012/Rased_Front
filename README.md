@@ -369,7 +369,7 @@ Graduation Project 2025, FCI - KFSU
 ## 📞 Support
 
 For support and questions:
-- 📧 Email: support@rased-app.com
+- 📧 Email: rased.fci@gmail.com
 - 🎨 Design System: [Figma Design](https://www.figma.com/design/cgcUBuFcyck4PK70W3Irc5/RASED?node-id=0-1&p=f&t=wSR1Ocd1LbpKrzYf-0)
 - 🚀 Live Demo: [Figma Design](http://rased-app.surge.sh/)
 

@@ -359,12 +359,12 @@ Graduation Project 2025, FCI - KFSU
 
 ## 👥 Team
 
-- **Mohamed Adel Elsayed** - FullStack Engineer
-- **Ayman Mohamed** - Backend Engineer
-- **Fawzy Shaker** - Backend Engineer
-- **Mohamed Elmahallawy** - CyberSecurity Engineer
-- **Basem Mohamed** - Frontend Engineer
-- **Basant Selima** - Product Designer
+- [**Mohamed Adel Elsayed**](https://github.com/Mohamed-Adel23) - FullStack Engineer
+- [**Ayman Mohamed**](https://github.com/AymanYassien) - Backend Engineer
+- [**Fawzy Shaker**](https://github.com/fawziielfaramawii) - Backend Engineer
+- [**Mohamed Elmahallawy**](https://github.com/Mohamed-Elmhalawy/) - CyberSecurity Engineer
+- [**Basem Mohamed**](https://github.com/basemmohamed012) - Frontend Engineer
+- [**Basant Selima**](https://github.com/Basant-Selima) - Product Designer
 
 ## 📞 Support
 
